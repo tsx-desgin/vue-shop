@@ -6,7 +6,7 @@
 <home-nav :navList="navList"></home-nav>
 <recommend :recList="recList"></recommend>
 <sales :saleList="saleList"></sales>
-<new-goods></new-goods>
+<new-goods :newList="newList"></new-goods>
 </div>
 </template>
 
@@ -34,7 +34,8 @@ export default {
       swiperList:[],
       navList:[],
       recList:[],
-      saleList:[],  
+      saleList:[],
+      newList:[],  
     }
   },
   mounted(){
@@ -42,6 +43,7 @@ export default {
     this.getNav()
     this.getRec()
     this.getSale()
+    this.getNew()
   },
   methods:{
     async getSwiper(){
@@ -62,6 +64,9 @@ export default {
     },
     async getSale(){
       this.saleList=await this.axios.get('api/goods/sales?type=1');
+    },
+    async getNew(){
+      this.newList=await this.axios.get('api/goods/new?type=1');
       
     }
   }

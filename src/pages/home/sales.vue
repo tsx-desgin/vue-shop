@@ -8,7 +8,7 @@
                 <img :src="val.img" alt="" class="goods-img">
                 <div class="goods-info">
                     <div class="goods-name">{{val.name}}</div>
-                    <div class="goods-price">¥{{val.price}}</div>
+                    <div class="goods-price">¥{{val.price|formatPrice}}</div>
                 </div>
             </div>
         </swiper-slide>
@@ -18,6 +18,7 @@
 </container>
 </template>
 <script>
+import {filters} from '@/utils/mixins'
 import container from "./container"
 import { Swiper, SwiperSlide} from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
@@ -30,6 +31,7 @@ export default {
         Swiper,
         SwiperSlide,
     },
+    mixins:[filters],
     computed:{
         show(){
             return this.saleList.length;
@@ -45,7 +47,6 @@ export default {
                 }
                 pages[page].push(item);
             });
-            console.log(pages)
             this.pages=pages;
         }
     },
