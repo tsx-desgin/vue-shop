@@ -1,5 +1,5 @@
 <template>
-  <swiper  :options="swiperOptions" class="swiper-container">
+  <swiper  :options="swiperOptions" class="swiper-container" v-if="show">
       <!-- 加入：key -->
     <swiper-slide v-for="item of swiperList" :key="item">
          <img :data-src="item" class="swiper-lazy swiper-img">
@@ -15,6 +15,11 @@ import 'swiper/css/swiper.css'
 export default {
   props:{
     swiperList:Array,
+  },
+  computed:{
+    show(){
+      return !!this.swiperList.length;
+    }
   },
     components: {
     Swiper,

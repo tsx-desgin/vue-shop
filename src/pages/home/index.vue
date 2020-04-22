@@ -1,8 +1,10 @@
 <template>
-<div>
+<div class="page">
 <Head></Head>
 <Search-bar></Search-bar>
 <home-swiper :swiperList="swiperList"></home-swiper>
+<home-nav :navList="navList"></home-nav>
+<recommend :recList="recList"></recommend>
 </div>
 </template>
 
@@ -11,37 +13,58 @@
 import Head from "@/components/head"
 import SearchBar from "@/components/searchBAr"
 import homeSwiper from "./swiper"
+import homeNav from "./IconNav"
+import recommend from "./Recommend"
 export default {
   components:{
     Head,
     SearchBar,
     homeSwiper,
+    homeNav,
+    recommend,
   },
   data(){
     return{
-      swiperList:[
-          "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/a4aa0cbfad7de34618c4bebdbdeee4e1.jpg?w=2452&h=920",
-          "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/f401f49278099001dd8441c8f906d9ea.jpg?thumb=1&w=1226&h=460&f=webp&q=90",
-          "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ff21ffde85c613d276ccc11ad0d080a9.jpg?thumb=1&w=1226&h=460&f=webp&q=90"
-      ]  
+      swiperList:[],
+      navList:[],
+      recList:[],  
     }
   },
   mounted(){
     this.getSwiper()
+    this.getNav()
+    this.getRec()
   },
   methods:{
-    getSwiper(){
-     this.axios.get('/api/swiper').then(res=>{
-       console.log(res)
-     })
+    async getSwiper(){
+      // 问号的也可以用params,写成对象 /api/swiper?type=1
+      // this.axios.get('/api/swiper',{
+      //  params:{
+      //    type:1
+      //    }
+      const res=await this.axios.get('api/swiper?type=1');
+      const swiperList= res.map(item=>item.img)
+      this.swiperList=swiperList
+    },
+    async getNav(){
+      this.navList=await this.axios.get('api/navigate?type=1');
+    },
+    async getRec(){
+      this.recList=await this.axios.get('api/goods/recommend?type=1');
+      console.log(this.recList)
     }
   }
+  
 }
 </script>
 
 <style lang="scss" scoped>
 @import "~@/assets/scss/global";
-
+.page{
+  width: 100%;
+  min-height: 100%;
+  background: $color-c;
+}
 </style>
 
 
