@@ -5,6 +5,8 @@
 <home-swiper :swiperList="swiperList"></home-swiper>
 <home-nav :navList="navList"></home-nav>
 <recommend :recList="recList"></recommend>
+<sales :saleList="saleList"></sales>
+<new-goods></new-goods>
 </div>
 </template>
 
@@ -15,6 +17,8 @@ import SearchBar from "@/components/searchBAr"
 import homeSwiper from "./swiper"
 import homeNav from "./IconNav"
 import recommend from "./Recommend"
+import sales from "./sales"
+import newGoods from "./NewGoods"
 export default {
   components:{
     Head,
@@ -22,18 +26,22 @@ export default {
     homeSwiper,
     homeNav,
     recommend,
+    sales,
+    newGoods,
   },
   data(){
     return{
       swiperList:[],
       navList:[],
-      recList:[],  
+      recList:[],
+      saleList:[],  
     }
   },
   mounted(){
     this.getSwiper()
     this.getNav()
     this.getRec()
+    this.getSale()
   },
   methods:{
     async getSwiper(){
@@ -51,7 +59,10 @@ export default {
     },
     async getRec(){
       this.recList=await this.axios.get('api/goods/recommend?type=1');
-      console.log(this.recList)
+    },
+    async getSale(){
+      this.saleList=await this.axios.get('api/goods/sales?type=1');
+      
     }
   }
   

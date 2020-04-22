@@ -23,7 +23,7 @@ export default {
     }
 }
 </script>
-<style lang="scss" scopeds>
+<style lang="scss" scoped>
 @import "~@/assets/scss/global";
 .nav-container{
     width: 100%;

@@ -5,7 +5,7 @@
     align-items: $align;
 }
 
-@mixin  container($height) {
+@mixin  container($height:auto) {
     width: 100%;
     height:$height ;
     padding: .2rem ;
