@@ -110,11 +110,14 @@ export default {
       if(this.page===1){
         this.totalPage=Math.ceil(total/this.count);
       }
+      this.page++;
     },
     async loadMore(){
       this.busy=true;
-      await this.getList()
-      this.busy=false;
+      if(this.page<=this.totalPage||this.totalPage===0){
+        await this.getList();
+        this.busy=false;
+      }
     }
   }
   

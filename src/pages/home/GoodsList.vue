@@ -2,7 +2,7 @@
     <container title="为你推荐">
         <template #content>
             <div class="goods-list">
-                <div class="goods-item border" v-for="item of list"  :key="item.id" >
+                <div class="goods-item border" v-for="(item,index) of list"  :key="index" >
                 <img v-lazy="item.img" alt="" class="goods-img">
                 <div class="goods-info">
                     <div class="goods-name">{{item.name}}</div>
