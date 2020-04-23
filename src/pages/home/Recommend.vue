@@ -1,10 +1,10 @@
 <template>
-<container title="精品推荐">
+<container title="精品推荐" morePath="/goods-list">
     <template #content>
     <div class="goods-list-container" ref="wrapper">
         <div class="goods-list" ref="Recomend_list" v-if="show">
             <div class="goods-item border" v-for="item of recList"  :key="item.id" >
-                <img :src="item.img" alt="" class="goods-img">
+                <img v-lazy="item.img" alt="" class="goods-img">
                 <div class="goods-info">
                     <div class="goods-name">{{item.name}}</div>
                     <div class="goods-price">¥{{item.price|formatPrice}}</div>

@@ -7,6 +7,7 @@
 <recommend :recList="recList"></recommend>
 <sales :saleList="saleList"></sales>
 <new-goods :newList="newList"></new-goods>
+<Goods-list :list="list"></Goods-list>
 </div>
 </template>
 
@@ -19,6 +20,8 @@ import homeNav from "./IconNav"
 import recommend from "./Recommend"
 import sales from "./sales"
 import newGoods from "./NewGoods"
+import GoodsList from "./GoodsList"
+import { Storage } from "@/utils/storage";
 export default {
   components:{
     Head,
@@ -28,6 +31,7 @@ export default {
     recommend,
     sales,
     newGoods,
+    GoodsList,
   },
   data(){
     return{
@@ -35,7 +39,11 @@ export default {
       navList:[],
       recList:[],
       saleList:[],
-      newList:[],  
+      newList:[], 
+      list:[] ,
+      page:1, //为你推荐的页码
+      count:8,//每次获取的个数的个数
+      totalPage:0,//总页码
     }
   },
   mounted(){
@@ -44,6 +52,7 @@ export default {
     this.getRec()
     this.getSale()
     this.getNew()
+    this.getList()
   },
   methods:{
     async getSwiper(){
@@ -52,12 +61,26 @@ export default {
       //  params:{
       //    type:1
       //    }
-      const res=await this.axios.get('api/swiper?type=1');
-      const swiperList= res.map(item=>item.img)
-      this.swiperList=swiperList
+      const swiper=Storage.getItem('swiper');
+      if(swiper){
+        this.swiperList=swiper;
+      }else{
+        const res=await this.axios.get('api/swiper?type=1');
+        const swiperList= res.map(item=>item.img)
+        this.swiperList=swiperList;
+        Storage.setItem('swiper',swiperList);
+      }
+
     },
     async getNav(){
-      this.navList=await this.axios.get('api/navigate?type=1');
+      const nav=Storage.getItem('nav');
+      if(nav){
+        this.navList=nav;
+      }else{
+        const navList=await this.axios.get('api/navigate?type=1');
+        this.navList=navList;
+        Storage.setItem('nav',navList);
+      }
     },
     async getRec(){
       this.recList=await this.axios.get('api/goods/recommend?type=1');
@@ -67,7 +90,19 @@ export default {
     },
     async getNew(){
       this.newList=await this.axios.get('api/goods/new?type=1');
-      
+    },
+    async getList(){
+      const {goods,total}=await this.axios.get('api/goods_list?type=1',{
+        params:{
+          page:this.page,
+          count:this.count,
+        }
+      });
+      this.list=this.list.concat(goods);
+      if(this.page===1){
+        this.totalPage=Math.ceil(total/this.count);
+      }
+      console.log(goods,total)
     }
   }
   

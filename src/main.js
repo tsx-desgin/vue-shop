@@ -5,6 +5,8 @@ import VueAxios from "vue-axios"
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+// 懒加载
+import VueLazyload from 'vue-lazyload'
 // Request 和 Response 对象起到了服务器与客户机之间的信息传递作用。
 // Request 对象用于接收客户端浏览器提交的数据，
 // 而 Response 对象的功能则是将服务器端的数据发送到客户端浏览器。
@@ -24,6 +26,10 @@ axios.interceptors.response.use(function (response) {
 });
 // 使用axios
 Vue.use(VueAxios, axios)
+// 图片懒加载
+Vue.use(VueLazyload, {
+  loading: '/1.svg',
+})
 Vue.config.productionTip = false;
 
 new Vue({

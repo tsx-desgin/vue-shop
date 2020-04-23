@@ -2,7 +2,7 @@
 <div class="container">
     <div class="title">
         <span>{{title}}</span>
-        <span class="icon more">更多 &#xe63c;</span>
+        <span class="icon more" v-if="show">更多 &#xe63c;</span>
     </div>
     <slot name="content"></slot>
 </div>
@@ -11,6 +11,15 @@
 export default {
     props:{
         title:String,
+        morePath:String,
+    },
+    computed:{
+        show(){
+            if(this.morePath!=undefined){
+                return true
+            }
+             return false
+        }
     }
 }
 </script>

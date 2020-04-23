@@ -1,5 +1,5 @@
 <template>
-    <container title="新品优选" morePath="/goods-list">
+    <container title="为你推荐">
         <template #content>
             <div class="goods-list">
                 <div class="goods-item border" v-for="item of list"  :key="item.id" >
@@ -18,17 +18,7 @@ import container from './container'
 import {filters} from '@/utils/mixins'
 export default {
     props:{
-        newList:Array,
-    },
-    data(){
-        return{
-            list:[],
-        }
-    },
-    watch:{
-        newList(){
-            this.list=this.newList.slice(0,3);
-        }
+        list:Array,
     },
     // 混入插件的使用
     mixins:[filters],
@@ -40,19 +30,20 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/scss/global";
 .goods-list{
-    height: 3.2rem;
+    height: auto;
     margin-top:.2rem ;
     @include flex($justify:space-between);
+    flex-wrap: wrap;
 }
 .goods-item{
-    width: 2.2rem;
-    height: 100%;
+    width: 3.44rem;
+    height: 4rem;
     border-radius: .1rem;
     overflow: hidden;
     @include flex($direction:column);
     .goods-img{
         width: 100%;
-        height:2.1rem;
+        height:2.66rem;
     }
     .goods-info{
         width:90%;
