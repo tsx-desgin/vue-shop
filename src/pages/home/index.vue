@@ -7,12 +7,19 @@
 <recommend :recList="recList"></recommend>
 <sales :saleList="saleList"></sales>
 <new-goods :newList="newList"></new-goods>
-<Goods-list :list="list"></Goods-list>
+<!-- 
+  infinite-scroll-disabled:是否禁用infinite-scroll true 禁用 false 不禁用
+ -->
+<div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="50">
+  <Goods-list :list="list"></Goods-list>
+</div>
 </div>
 </template>
 
 <script>
 // import Head from "../../components/head"
+// 引用无限滚动
+import infiniteScroll from 'vue-infinite-scroll'
 import Head from "@/components/head"
 import SearchBar from "@/components/searchBAr"
 import homeSwiper from "./swiper"
@@ -23,6 +30,8 @@ import newGoods from "./NewGoods"
 import GoodsList from "./GoodsList"
 import { Storage } from "@/utils/storage";
 export default {
+  // 调用无限滚动
+  directives: {infiniteScroll},
   components:{
     Head,
     SearchBar,
@@ -52,7 +61,6 @@ export default {
     this.getRec()
     this.getSale()
     this.getNew()
-    this.getList()
   },
   methods:{
     async getSwiper(){
@@ -102,7 +110,11 @@ export default {
       if(this.page===1){
         this.totalPage=Math.ceil(total/this.count);
       }
-      console.log(goods,total)
+    },
+    async loadMore(){
+      this.busy=true;
+      await this.getList()
+      this.busy=false;
     }
   }
   
