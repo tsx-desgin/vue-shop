@@ -32,6 +32,7 @@ export default {
             el: '.swiper-pagination'
           },
           loop:true,
+          autoplay:true,
            lazy: {
           loadPrevNext: true,
         },

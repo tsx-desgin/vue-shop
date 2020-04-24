@@ -26,7 +26,10 @@ export default {
     padding: .15rem .4rem;
     box-sizing: border-box;
     background: $color-a;
-    margin-top:-1px ;
+    position: fixed;
+    left: 0;
+    top: $head-h;
+    z-index: 999;
     .search{
         width: 100%;
         height: 100%;

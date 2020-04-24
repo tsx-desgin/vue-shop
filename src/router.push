@@ -1,0 +1,18 @@
+// 使用history进行后退
+//             history.back()
+//             使用router进行后退
+//             当直接打开时
+            /*
+              1、路由传值   this.$router.push()
+
+                （1） 想要导航到不同的URL，使用router.push()方法，这个方法会向history栈添加一个新纪录，
+                所以，当用户点击浏览器后退按钮时，会回到之前的URL
+
+                （2）当点击 <router-link> 时，这个方法会在内部调用，即点击 <router-link :to="..."> 等同于调用 router.push(...)
+
+                　　a)      声明式：<router-link :to="...">
+
+                　　b)      编程式：router.push(...)
+
+                　　c)      该方法的参数可以是一个字符串路径，或者一个描述地址的对象。path : ('path')　name : ({name})
+            */ 

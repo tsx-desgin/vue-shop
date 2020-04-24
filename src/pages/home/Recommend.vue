@@ -63,7 +63,6 @@ export default {
             this.$refs.Recomend_list.style.width = goodsListWidth+'rem';
             if (!this.scroll) {
               this.scroll = new BScroll(this.$refs.wrapper, this.scrollOptions)
-              console.log(this.scroll)
             } else {
               this.scroll.refresh()//重新属性Bscroll状态
             }

@@ -1,5 +1,5 @@
 <template>
-<div class="page">
+<div class="page" ref="page">
 <Head></Head>
 <Search-bar></Search-bar>
 <home-swiper :swiperList="swiperList"></home-swiper>
@@ -10,9 +10,11 @@
 <!-- 
   infinite-scroll-disabled:是否禁用infinite-scroll true 禁用 false 不禁用
  -->
-<div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="50">
+<div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" :infinite-scroll-distance="scrollDistance">
   <Goods-list :list="list"></Goods-list>
 </div>
+<com-footer></com-footer>
+<loading :show="showLoading"></loading>
 </div>
 </template>
 
@@ -21,6 +23,8 @@
 // 引用无限滚动
 import infiniteScroll from 'vue-infinite-scroll'
 import Head from "@/components/head"
+import comFooter from "@/components/footer";
+import loading from "@/components/loading";
 import SearchBar from "@/components/searchBAr"
 import homeSwiper from "./swiper"
 import homeNav from "./IconNav"
@@ -34,6 +38,8 @@ export default {
   directives: {infiniteScroll},
   components:{
     Head,
+    comFooter,
+    loading,
     SearchBar,
     homeSwiper,
     homeNav,
@@ -53,14 +59,21 @@ export default {
       page:1, //为你推荐的页码
       count:8,//每次获取的个数的个数
       totalPage:0,//总页码
+      scrollDistance:0,
+      showLoading:false,
     }
   },
-  mounted(){
-    this.getSwiper()
-    this.getNav()
-    this.getRec()
-    this.getSale()
-    this.getNew()
+  async mounted(){
+    const footerHeight= document.querySelector(".footer-container").offsetHeight;
+    this.$refs.page.style.paddingBottom=footerHeight+'px';
+    this.scrollDistance=footerHeight;
+    this.showLoading=true;
+    await this.getSwiper()
+    await this.getNav()
+    await this.getRec()
+    await this.getSale()
+    await this.getNew()
+    this.showLoading=false;
   },
   methods:{
     async getSwiper(){
@@ -130,6 +143,7 @@ export default {
   width: 100%;
   min-height: 100%;
   background: $color-c;
+  padding-top:$head-h+$search-h ;
 }
 </style>
 
