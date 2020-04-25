@@ -4,19 +4,21 @@
     <search-bar class="search"></search-bar>
     <div class="content">
         <div class="content-left">
-            <category :content="category"></category>
+            <category :content="category" @change="loadSubCategory"></category>
         </div>
         <div class="content-right">
             <sub-category :content="subCategory"></sub-category>
         </div>
     </div>
     <com-footer ref="footer" class="footer"></com-footer>
+    <loading :show="showLoading"></loading>
 </div>
 </template>
 <script>
 import Head from "@/components/head"
 import comFooter from "@/components/footer";
 import SearchBar from "@/components/searchBAr"
+import loading from "@/components/loading";
 import category from "./category";
 import subCategory from "./subCategory";
 export default {
@@ -26,6 +28,7 @@ export default {
         comFooter,
         category,
         subCategory,
+        loading,
     },
     data(){
         return{
@@ -33,6 +36,7 @@ export default {
             category:[],//一级分类
             subCategory:[],//子分类
             catId:0,
+            showLoading:false,
         }
     },
     mounted(){
@@ -55,8 +59,15 @@ export default {
         },
         // 获取子分类
         async getsubCategory(catId){
+            this.showLoading=true;
             this.subCategory=await this.axios.get('api/goods_category?type=1&cat_id='+catId);
+            this.showLoading=false;
         },
+        async loadSubCategory(catId){
+             this.showLoading=true;
+             await this.getsubCategory(catId)
+             this.showLoading=false;
+        }
     },
     // 导航守卫
     beforeRouteEnter (to, from, next) {
@@ -71,7 +82,17 @@ export default {
 @import "~@/assets/scss/global";
 .content{
     width:100%;
-    background: forestgreen;
     margin-top: $head-h+$search-h;
+    @include flex;
+    .content-left{
+        width: 2rem;
+        height: 100%;
+        background: $color-c;
+    }
+    .content-right{
+        width: 0;
+        flex: 1;
+        height: 100%;
+    }
 }
 </style>

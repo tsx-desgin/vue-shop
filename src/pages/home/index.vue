@@ -61,6 +61,7 @@ export default {
       totalPage:0,//总页码
       scrollDistance:0,
       showLoading:false,
+      busy:false,
     }
   },
   async mounted(){
