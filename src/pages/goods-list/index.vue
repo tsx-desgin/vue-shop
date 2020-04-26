@@ -16,13 +16,19 @@
             <span class="icon">&#xe630;</span>
         </div>
     </div>
+    <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" :infinite-scroll-distance="scrollDistance">
     <list :list="list"></list>
+    </div>
 </div>
 </template>
 <script>
+// 引用无限滚动
+import infiniteScroll from 'vue-infinite-scroll'
 import Head from "@/components/head"
 import list from "./list"
 export default {
+    // 调用无限滚动
+  directives: {infiniteScroll},
     components:{
         Head,
         list,
@@ -60,6 +66,7 @@ export default {
             this.page=1;
         },
         async getList(){
+            this.$showLoading()
         const {goods,total}=await this.axios.get('api/goods_list?type=1',{
             params:{
             page:this.page,
@@ -74,6 +81,13 @@ export default {
         }
         this.page++;
         },
+        async loadMore(){
+        this.busy=true;
+        if(this.page<=this.totalPage||this.totalPage===0){
+            await this.getList();
+            this.busy=false;
+        }
+    },
     },
     // 导航守卫
     beforeRouteEnter (to, from, next) {
