@@ -6,6 +6,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import loading from "./plugin/loading"
+import modal from "./plugin/modal"
 // 懒加载
 import VueLazyload from 'vue-lazyload'
 // Request 和 Response 对象起到了服务器与客户机之间的信息传递作用。
@@ -32,6 +33,8 @@ Vue.use(VueLazyload, {
   loading: '/1.svg',
 })
 Vue.use(loading)
+Vue.use(modal)
+
 Vue.config.productionTip = false;
 
 new Vue({
