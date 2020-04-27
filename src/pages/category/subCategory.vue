@@ -2,7 +2,7 @@
 <div class="subCategory-container">
     <!--path :to="'/goodsList/'+item.cat_id" -->
     <!--name :to="{name:'goodsList',params:{cid:item.cat_id}}" -->
-    <router-link tag="div" :to="{name:'goodsList',params:{cid:item.cat_id},query:{cname:item.cat_name}}" class="subCategory-item" v-for="item of content" :key="item.cat_id">
+    <router-link tag="div" :to="{name:'goodsList',query:{cid:item.cat_id,cname:item.cat_name}}" class="subCategory-item" v-for="item of content" :key="item.cat_id">
         <img :src="item.img" alt="">
         <span>{{item.cat_name}}</span>
     </router-link>

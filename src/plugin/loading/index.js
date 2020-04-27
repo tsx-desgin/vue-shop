@@ -11,6 +11,10 @@ const loading={
             vm.show=true;
             vm.mask=mask;
         }
+        Vue.prototype.$hideLoading=function(){
+            vm.show=false;
+            vm.mask=false;
+        }
     }
 }
 export default loading

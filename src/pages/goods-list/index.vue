@@ -2,16 +2,16 @@
 <div class="page">
     <Head :title="cname||商品列表" :back="backUrl"></Head>
     <div class="sort-container border-bottom">
-        <div class="sort-item" :class="{active:sortField==='goods_id'}" @click="sortField='goods_id'">
+        <div class="sort-item" :class="{active:sortField==='goods_id'}" @click="sortGoodslist('goods_id')">
             综合
         </div>
-        <div class="sort-item" :class="{active:sortField==='sale_num'}" @click="sortField='sale_num'">
+        <div class="sort-item" :class="{active:sortField==='sale_num'}" @click="sortGoodslist('sale_num')">
             最热
         </div>
-        <div class="sort-item" :class="{active:sortField==='is_new'}" @click="sortField='is_new'">
+        <div class="sort-item" :class="{active:sortField==='is_new'}" @click="sortGoodslist('is_new')">
             新品
         </div>
-        <div class="sort-item" :class="{active:sortField==='goods_price'}" @click="sortField='goods_price'">
+        <div class="sort-item" :class="{active:sortField==='goods_price'}" @click="sortGoodslist('goods_price')">
             价格
             <span class="icon">&#xe630;</span>
         </div>
@@ -38,43 +38,68 @@ export default {
         cname:String,
     },
     mounted(){
-        this.getList();
-    },
-    watch:{
-        sortField(){
-            this.resetData();
-            this.getList();
-        }
+        this.catId=this.cid
     },
     data(){
         return{
             backUrl:'',
             sortField:'goods_id',
+            sortType:'',
             list:[] ,
             page:1, //为你推荐的页码
             count:8,//每次获取的个数的个数
             totalPage:0,//总页码
             busy:false,
             scrollDistance:0,
+            pid:0,
+            catId:0,
         }
     },
     methods:{
+        sortGoodslist(goods_sortField){
+            this.sortField=goods_sortField;
+            this.resetData();
+            this.getList();
+        },
         resetData(){
             this.list=[];
             this.busy=false;
             this.totalPage=0;
             this.page=1;
+            if(this.sortField!=='goods_price'){
+                if(this.sortType==''){
+                    this.sortType='asc'
+                }
+            }else{
+                this.sortType=this.sortType==='asc'?'desc':'asc'
+            }
+        },
+        async getCidByCname(){
+            if(this.cname!==''&&this.cid===0){
+                if(this.catId>0||this.pid>0){
+                    return
+                }
+                const res = await this.axios.get('api/category/cid',{params:{name:this.cname}})
+                if(res.parent){
+                    this.pid=res.cat_id;
+                }else{
+                    this.cat_id=res.cat_id
+                }
+            }
         },
         async getList(){
-            this.$showLoading()
+        this.$showLoading()
         const {goods,total}=await this.axios.get('api/goods_list?type=1',{
             params:{
             page:this.page,
             count:this.count,
-            cat_id:this.cid,
+            cat_id:this.catId, //一级分类id
             sortField:this.sortField,
+            pid:this.pid, //二级分类id
+            sortType:this.sortType,
             }
         });
+        this.$hideLoading()
         this.list=this.list.concat(goods);
         if(this.page===1){
             this.totalPage=Math.ceil(total/this.count);
@@ -82,6 +107,7 @@ export default {
         this.page++;
         },
         async loadMore(){
+        await this.getCidByCname()
         this.busy=true;
         if(this.page<=this.totalPage||this.totalPage===0){
             await this.getList();

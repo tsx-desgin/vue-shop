@@ -8,6 +8,7 @@
                 <div class="goods-info">
                     <div class="goods-name">{{item.name}}</div>
                     <div class="goods-price">¥{{item.price|formatPrice}}</div>
+                    <cart font-size=".28rem" :goods="item"></cart>
                 </div>
             </div>
         </div>
@@ -19,12 +20,14 @@
 import BScroll from 'better-scroll';
 import {formatPrice} from '@/utils/function'
 import container from "./container"
+import Cart from "@/components/cartBtn"
 export default {
     props:{
         recList:Array,
     },
     components:{
-        container
+        container,
+        Cart,
     },
     watch: {
      recList(newList){

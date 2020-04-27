@@ -7,6 +7,7 @@
                 <div class="goods-info">
                     <div class="goods-name">{{item.name}}</div>
                     <div class="goods-price">¥{{item.price|formatPrice}}</div>
+                    <Cart font-size=".28rem" :goods="item"></Cart>
                 </div>
             </div>
             </div>
@@ -14,6 +15,7 @@
     </container>
 </template>
 <script>
+import Cart from "@/components/cartBtn"
 import container from './container'
 import {filters} from '@/utils/mixins'
 export default {
@@ -33,7 +35,8 @@ export default {
     // 混入插件的使用
     mixins:[filters],
     components:{
-        container
+        container,
+        Cart,
     }
 }
 </script>

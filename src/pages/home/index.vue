@@ -14,7 +14,6 @@
   <Goods-list :list="list"></Goods-list>
 </div>
 <com-footer></com-footer>
-<loading :show="showLoading"></loading>
 </div>
 </template>
 
@@ -24,7 +23,6 @@
 import infiniteScroll from 'vue-infinite-scroll'
 import Head from "@/components/head"
 import comFooter from "@/components/footer";
-import loading from "@/components/loading";
 import SearchBar from "@/components/searchBAr"
 import homeSwiper from "./swiper"
 import homeNav from "./IconNav"
@@ -39,7 +37,6 @@ export default {
   components:{
     Head,
     comFooter,
-    loading,
     SearchBar,
     homeSwiper,
     homeNav,
@@ -60,7 +57,6 @@ export default {
       count:8,//每次获取的个数的个数
       totalPage:0,//总页码
       scrollDistance:0,
-      showLoading:false,
       busy:false,
     }
   },
@@ -68,13 +64,13 @@ export default {
     const footerHeight= document.querySelector(".footer-container").offsetHeight;
     this.$refs.page.style.paddingBottom=footerHeight+'px';
     this.scrollDistance=footerHeight;
-    this.showLoading=true;
+    this.$showLoading();
     await this.getSwiper()
     await this.getNav()
     await this.getRec()
     await this.getSale()
     await this.getNew()
-    this.showLoading=false;
+    this.$hideLoading();
   },
   methods:{
     async getSwiper(){

@@ -18,11 +18,11 @@ const routes = [
     component: category
   },
   {
-    path: "/goodsList/:cid/",//必须要带参数
+    path: "/goodsList",//必须要带参数
     // props:true,//组件内传值
     // 定义route
     props:route=>{
-      let cid=route.params.cid||0;
+      let cid=route.query.cid||0;
       let cname=route.query.cname;
       if(isNaN(cid)){
         cid=0

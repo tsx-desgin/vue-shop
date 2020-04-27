@@ -10,14 +10,18 @@
                         <span class="mare">￥{{item.market_price|formatPrice}}</span>
                 </div>
                 <div class="sale">{{item.sale_num}}人购买</div>
-                <div class="add-cart icon">&#xe669;</div>
+                <Cart :goods="item"></Cart>
             </div>
     </div>
 </div>
 </template>
 <script>
 import {filters} from '@/utils/mixins'
+import Cart from "@/components/cartBtn";
 export default {
+    components:{
+        Cart
+    },
     props:{
         list:Array,
     },
@@ -79,18 +83,6 @@ export default {
 .sale{
    color: #999;
    font-size: .28rem; 
-}
-.add-cart{
-    width: .6rem;
-    height: .6rem;
-    line-height: .6rem;
-    text-align: center;
-    text-align: center;
-    font-size: .4rem;
-    color: #ff5e46;
-    position: absolute;
-    right: 0;
-    bottom: 0;
 }
 .number{
     position: absolute;

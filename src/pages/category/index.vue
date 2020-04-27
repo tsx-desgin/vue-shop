@@ -51,7 +51,9 @@ export default {
     methods:{
         // 获取一级分类
         async getCategory(){
+            this.$showLoading()
             const category=await this.axios.get('api/goods_category?type=1');
+            this.$hideLoading()
             if(category.length>0){
                 this.getsubCategory(category[0].cat_id)
                 this.category=category;
@@ -59,21 +61,19 @@ export default {
         },
         // 获取子分类
         async getsubCategory(catId){
-            this.showLoading=true;
+            this.$showLoading()
             this.subCategory=await this.axios.get('api/goods_category?type=1&cat_id='+catId);
-            this.showLoading=false;
+            this.$hideLoading();
         },
         async loadSubCategory(catId){
-             this.showLoading=true;
              await this.getsubCategory(catId)
-             this.showLoading=false;
         }
     },
     // 导航守卫
     beforeRouteEnter (to, from, next) {
         next(vm=>{
         // 通过 `vm` 访问组件实例
-            vm.backUrl=from.path
+            vm.backUrl=from.path;
         })//通过next()来渲染
     },
 }
