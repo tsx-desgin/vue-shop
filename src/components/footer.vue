@@ -13,10 +13,10 @@
         <span class="icon">&#xe602;</span>
         <span>分类</span>
     </router-link>
-    <div class="footer-nav">
+    <router-link to="/cart" tag="div" class="footer-nav">
         <span class="icon">&#xe669;</span>
         <span>购物车</span>
-    </div>
+    </router-link>
     <div class="footer-nav">
         <span class="icon">&#xe651;</span>
         <span>我的</span>
@@ -30,7 +30,7 @@ export default {}
 @import "~@/assets/scss/global";
 .footer-container{
     width: 100%;
-    height: 1.3rem;
+    height: $footer-h;
     background: #fff;
     position: fixed;
     bottom: 0;

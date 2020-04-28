@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Home from "../pages/home/index.vue";
 import category from "../pages/category/index.vue";
 import goodsList from "../pages/goods-list/index.vue";
+import cart from "../pages/cart/index.vue";
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,11 @@ const routes = [
     path: "/category",
     name: "category",
     component: category
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: cart
   },
   {
     path: "/goodsList",//必须要带参数

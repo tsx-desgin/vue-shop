@@ -1,12 +1,12 @@
 <template>
-<transition>
+<transition name="fade">
     <div class="container" v-if="visiable">
         <div class="modal">
             <div class="modal-title" v-if="title!==''">{{title}}</div>
             <div class="modal-content" v-if="content!==''">{{content}}</div>
-            <div class="modal-btn">
-                <div @click="cancel" class="btn">{{btn.cancel}}</div>
-                <div @click="confirm" class="btn">{{btn.confirm}}</div>
+            <div class="modal-btn border-top">
+                <div @click="cancel" class="btn border-right">{{btn[1]}}</div>
+                <div @click="confirm" class="btn">{{btn[0]}}</div>
             </div>
         </div>
     </div>
@@ -16,14 +16,29 @@
 export default {
     data(){
         return{
-            visiable:true,
+            visiable:false,
             title:'',
             content:'',
-            btn:{
-                confirm:'确定',
-                cancel:'取消',
-            }
+            btn:['确认','取消']
         }
+    },
+    methods:{
+        cancel(){
+            this.visiable=false;
+            const result={
+                confirm:false,
+                cancel:true,
+            }
+            this.$emit('modal',result)
+        },
+        confirm(){
+            this.visiable=false;
+            const result={
+                confirm:true,
+                cancel:false,
+            }
+            this.$emit('modal',result)
+        },
     }
 }
 </script>
@@ -41,7 +56,7 @@ export default {
     align-items: center;
     justify-content: center;
     .modal{
-        width: 50%;
+        width: 40%;
         height: auto;
         background: #fff;
         color: $color-a;
@@ -52,14 +67,15 @@ export default {
             text-align: center;
             line-height: .4rem;
             font-size:.4rem ;
-            font-weight: 600;
+            font-weight: 500;
         }
         .modal-content{
             width: 100%;
-            height: .35rem;
+            height: auto;
+            margin: .2rem 0;
             text-align: center;
             line-height: .35rem;
-            font-size:.4rem ;
+            font-size:.28rem ;
             font-weight: 400;
         }
         .modal-btn{
@@ -67,11 +83,18 @@ export default {
             height: .45rem;
             @include flex($justify:space-between);
             .btn{
-                width: 28%;
+                width: 50%;
                 height: 100%;
                 @include flex();
             }
         }
     }
+}
+.fade-enter-active,
+.fade-leave-active{
+    transition: opacity .5s;;
+}
+.fade-enter,.fade-leave-to{
+    opacity: 0;
 }
 </style>
