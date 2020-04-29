@@ -9,7 +9,7 @@
                 <div class="goods-info">
                     <div class="goods-name">{{val.name}}</div>
                     <div class="goods-price">¥{{val.price|formatPrice}}</div>
-                    <cart font-size=".28rem" :goods="item"></cart>
+                    <cart font-size=".28rem" :goods="val"></cart>
                 </div>
             </div>
         </swiper-slide>

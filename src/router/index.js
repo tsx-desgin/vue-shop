@@ -4,6 +4,8 @@ import Home from "../pages/home/index.vue";
 import category from "../pages/category/index.vue";
 import goodsList from "../pages/goods-list/index.vue";
 import cart from "../pages/cart/index.vue";
+import goodsDetail from "../pages/goods-detail/index.vue";
+import notfind from "../pages/goods-nofind/index.vue";
 
 Vue.use(VueRouter);
 
@@ -22,6 +24,38 @@ const routes = [
     path: "/cart",
     name: "cart",
     component: cart
+  },
+  {
+    path: "/notfind",
+    name: "notfind",
+    component: notfind
+  },
+  {
+    path: "/goodsDetail",
+    redirect:'/'  //重定向
+  },
+  {
+    path: "/goodsDetail/:id",
+    beforeEnter(to,from,next){
+      const id=to.params.id;
+      if(!/^\d+$/.test(id)){
+        next(from.path)
+      }else{
+        next()
+      }
+    },
+    props:route=>{
+      let id=route.params.id ;
+      if(isNaN(id)){
+        id=0;
+      }
+      console.log(id)
+      return{
+        id:parseInt(id),
+      }
+    },
+    name: "goodsDetail",
+    component: goodsDetail
   },
   {
     path: "/goodsList",//必须要带参数

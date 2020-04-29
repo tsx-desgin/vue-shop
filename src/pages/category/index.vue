@@ -73,7 +73,7 @@ export default {
     beforeRouteEnter (to, from, next) {
         next(vm=>{
         // 通过 `vm` 访问组件实例
-            vm.backUrl=from.path;
+            vm.backUrl='/';
         })//通过next()来渲染
     },
 }

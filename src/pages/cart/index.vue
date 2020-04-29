@@ -11,9 +11,9 @@
                 <div class="goods-price">
                     <span>￥{{item.price}}</span>
                 <div class="goods-number-wrapper border">
-                    <span :class="{'disabled':item.number===1}" class="left icon" @click="reduceCart(item.id)">&#xe701;</span>
+                    <span :class="{'disabled':item.buyNumber===1}" class="left icon" @click="reduceCart(item.id)">&#xe701;</span>
                     <span>{{item.buyNumber}}</span>
-                    <span class="opra icon" @click='addCart(item)'>&#xe60b;</span>
+                    <span class="opra icon" @click='addCart(item.id)'>&#xe60b;</span>
                 </div>
                 </div>
             </div>
@@ -78,15 +78,12 @@ export default {
             this.selectAll=selectAll.length>0?selectAll.length===this.cart.length:false;
             this.cartNum=cartNum;
             this.total=total;
+            Storage.setItem('cart',this.cart);
         },
         submitCart(){},
         toggleSelectAll(){
             this.cart.forEach(item=>{
-                if(item.selected){
-                    this.selectAll=true;
-                }else{
-                    this.selectAll=false;
-                }
+                item.selected=!this.selectAll;
             })
             this.countCart()
         },
@@ -94,6 +91,34 @@ export default {
             const index=this.cart.findIndex(item=>item.id===goodsId);
             this.cart[index].selected=!this.cart[index].selected;
             this.countCart()
+        },
+        reduceCart(goodsId){
+            const index=this.cart.findIndex(item=>item.id===goodsId);
+            if(this.cart[index].buyNumber>1){
+                this.cart[index].buyNumber--;
+            }
+            this.countCart()
+        },
+        addCart(goodsId){
+            const index=this.cart.findIndex(item=>item.id===goodsId);
+            this.cart[index].buyNumber++;
+            this.countCart()
+        },
+        delCart(goodsId){
+            this.$showModal({
+                title:'提示',
+                content:'确认要删除吗?',
+                success:res=>{
+                    const index=this.cart.findIndex(item=>item.id===goodsId);
+                    if(res.confirm){
+                        this.cart.splice(index,1)
+                        this.countCart()
+                    }
+                    if(res.cancel){
+                        this.cart[index].delete=false
+                    }
+                }
+            })
         },
         touchStart(event){
             touchStartX=event.changedTouches[0].clientX;
@@ -206,6 +231,10 @@ export default {
     color: #333;
     cursor: pointer;
     user-select: none;
+    z-index: 999;
+    &.disabled{
+        color: $color-f;
+    }
 }
 .count{
     position: fixed;
