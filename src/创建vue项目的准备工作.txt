@@ -1,0 +1,480 @@
+1. 安装nodejs   网页：http://nodejs.cn/download/
+	控制台输入 node -v 和 npm -v 判断 node是否安装成功
+	用 JavaScript （运行在 Node.js 上）写的 npm，全称是 Node Package Manager
+	安装cnpm  淘宝提供的一个完整npmjs.org镜像  使用语法和npm完全相同
+	npm install cnpm -g --registry=https://registry.npm.taobao.org
+2.注册码云网站/github账号 
+	https://gitee.com/ 
+	http://git.mydoc.io/?t=154712#text_154712(码云的帮助文档)
+	创建私有项目库（选择语言，其他默认）
+3.安装git
+	下载安装包，全部默认下一步
+		git --version
+4.本地git和码云/github进行关联   
+	4.1 创建ssh公钥
+		运行 git bash(创建一个Linux小环境)
+			ssh-keygen -t rsa -C "建议使用码云账号邮箱"
+			三次回车即可生成 ssh key
+			查看你的 public key
+			cat ~/.ssh/id_rsa.pub  
+			把得到的公钥设置到码云的ssh公钥中
+
+			每次 Git 提交时都会引用这两条信息，说明是谁提交了更新，所以会随更新内容一起被永久纳入历史记录：
+			git config --global user.email ""
+			git config --global user.name ""
+
+			git config --list
+	4.2 使用git复制码云代码库中的内容
+		git clone git@gitee.com:levilee/Travel.git
+
+如果从仓库中下载的别人的代码运行 报错“‘webpack-dev-server’不是内部或外部命令
+		1.“node_modules”文件夹删除
+		在项目目录中运行以下命令
+		2.cnpm install
+		3.npm run build
+		4.npm run dev
+
+5.创建vue-cli项目
+	5.1 安装cli 脚手架
+		cnpm intall --global vue-cli   (vue-cli2.+)
+    cnpm i -g @vue/cli (vue-cli最新版目前为4.+)
+	5.2 创建项目 
+    vue-cli2.+
+  		vue init webpack 项目文件夹(不能含有大写字母)
+  			安装路由
+  			编译形式选默认
+  			Eslint Y
+  			Standard
+  			testes N
+  			e2e N
+  			包管理 npm
+  		cd 项目文件夹
+  		npm run dev
+    vue-cli3.+ / vue-cli4.+
+      1. vue create 项目文件夹(不能含有大写字母)
+      2. 选择手动配置还是默认配置
+　　　　　　default  默认配置 (只有bable和eslint)（如果选择默认就直接跳到项目安装过程）
+　　　　　　Manually select features  手动配置
+        选择手动配置：
+          1. 按空格选择： 
+            Babel：将ES6编译成ES5
+            Router：路由
+            Vuex：状态管理
+            CSS Pre-processors：css预编译 
+            Linter/ Formatter：代码检查工具
+          2. 路由使用历史模式?
+          3. 使用什么css预编译器？
+          4. 代码检查工具选择
+            tslint: typescript格式验证工具（如果前面选择了TypeScript会有这一项）
+            eslint w...: 只进行报错提醒；
+            eslint + A...: 不严谨模式；
+            eslint + S...: 正常模式
+            eslint + P...: 严格模式；
+          5. 选择什么时候进行代码校验
+            Lint on save 保存就检查
+            lint and fix on commit   fix 或者 commit 的时候检查
+          6. 选择把我们的配置保存到哪个文件中
+            In dedicated config files 存放到独立文件中
+            In package.json 存放到 package.json 中
+          7. 问我们要不要把我们的配置保存下来，为之后创建项目的时候使用
+    注： 可以使用vue ui提供的可视化界面创建项目
+
+
+<router-view/>  显示当前路由所对应的内容
+<router-link to="/list"></router-link>
+
+初始化CSS: reset.css
+1像素边框: border.css  （在某些机型1像素会显示成多像素）
+
+解决有些手机点击事件延迟300ms的问题
+	1. cnpm install fastclick --save
+	2. main.js  
+		import fastClick from 'fastclick'
+		fastClick.attach(document.body)
+
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+width=device-width ：表示宽度是设备屏幕的宽度
+initial-scale=1.0：表示初始的缩放比例
+minimum-scale=1.0：表示最小的缩放比例
+maximum-scale=1.0：表示最大的缩放比例
+user-scalable=no：表示用户是否可以调整缩放比例
+
+
+安装scss和compass
+	cnpm install sass-loader node-sass compass-mixins --save-dev
+
+修改build/util.js
+  ...
+exports.cssLoaders = function (options) {
+ ...
+ return {
+  ...
+  // 将sass和scss修改为如下
+  sass: generateLoaders('sass', { indentedSyntax: true, includePaths: [path.resolve(__dirname, '../node_modules/compass-mixins/lib')] }),
+  scss: generateLoaders('sass', { includePaths: [path.resolve(__dirname, '../node_modules/compass-mixins/lib')] }),
+  ...
+ }
+}
+...
+然后在页面的样式中使用
+
+
+Webpack 会将以 ~ 符号作为前缀的路径视作依赖模块而去解析
+
+<stlye lang="scss" scoped>  scoped表示样式只作用于当前模板
+  @import "compass";
+  如果不修改配置
+  使用 @import "../../node_modules/compass-mixins/lib/compass";　
+</style>
+
+在GitHub上搜索vue-awesome-swiper
+
+cnpm install vue-awesome-swiper --save
+
+安装浏览器插件 vue-devtools
+
+
+vue.list.forEach( (item,index) => {})  // 数组遍历
+
+安装 axios : axios 是一个基于Promise 用于浏览器和 nodejs 的 HTTP 客户端 
+IE兼容处理
+axios是promise实现的，提到promise，首先应该想到IE不支持，所以应该先加个垫片，给IE做下兼容性处理
+cnpm install --save babel-polyfill
+
+cnpm install axios --save
+
+axios的使用：
+  axios.create({
+    baseURL,
+    timeout,
+    headers
+  })
+  axios.get(url, config)
+  axios.post(url, data, config)
+  axios(config)  || axios(url[,config])  默认发送get请求
+
+  axios.all()  执行多个并发请求
+
+  config:
+    {
+      // `url` 是用于请求的服务器 URL
+      url: '/user',
+
+      // `method` 是创建请求时使用的方法
+      method: 'get', // 默认是 get
+
+      // `baseURL` 将自动加在 `url` 前面，除非 `url` 是一个绝对 URL。
+      // 它可以通过设置一个 `baseURL` 便于为 axios 实例的方法传递相对 URL
+      baseURL: 'https://some-domain.com/api/',
+
+      // `transformRequest` 允许在向服务器发送前，修改请求数据
+      // 只能用在 'PUT', 'POST' 和 'PATCH' 这几个请求方法
+      // 后面数组中的函数必须返回一个字符串，或 ArrayBuffer，或 Stream
+      transformRequest: [function (data) {
+        // 对 data 进行任意转换处理
+
+        return data;
+      }],
+
+      // `transformResponse` 在传递给 then/catch 前，允许修改响应数据
+      transformResponse: [function (data) {
+        // 对 data 进行任意转换处理
+
+        return data;
+      }],
+
+      // `headers` 是即将被发送的自定义请求头
+      headers: {'X-Requested-With': 'XMLHttpRequest'},
+
+      // `params` 是即将与请求一起发送的 URL 参数
+      // 必须是一个无格式对象(plain object)或 URLSearchParams 对象
+      params: {
+        ID: 12345
+      },
+
+      // `paramsSerializer` 是一个负责 `params` 序列化的函数
+      // 把params中的数组参数序列化
+      paramsSerializer: function(params) {
+        /*
+          需要安装qs库，将url参数和对象进行互换   qs.parse(url) 将url的参数转化为object对象
+          qs.stringify({ids: [1, 2, 3]}, { indices: false })
+         //形式： ids=1&ids=2&id=3
+        qs.stringify({ids: [1, 2, 3]}, {arrayFormat: 'indices'})
+         //形式： ids[0]=1&aids1]=2&ids[2]=3
+        qs.stringify({ids: [1, 2, 3]}, {arrayFormat: 'brackets'})
+         //形式：ids[]=1&ids[]=2&ids[]=3
+        qs.stringify({ids: [1, 2, 3]}, {arrayFormat: 'repeat'}) 
+
+         */
+        return qs.stringify(params, { indices: false })
+      },
+
+      // `data` 是作为请求主体被发送的数据
+      // 只适用于这些请求方法 'PUT', 'POST', 和 'PATCH'
+      // 在没有设置 `transformRequest` 时，必须是以下类型之一：
+      // - string, plain object, ArrayBuffer, ArrayBufferView, URLSearchParams
+      // - 浏览器专属：FormData, File, Blob
+      // - Node 专属： Stream
+      data: {
+        firstName: 'Fred'
+      },
+
+      // `timeout` 指定请求超时的毫秒数(0 表示无超时时间)
+      // 如果请求话费了超过 `timeout` 的时间，请求将被中断
+      timeout: 1000,
+
+      // `withCredentials` 表示跨域请求时是否需要使用凭证
+      withCredentials: false, // 默认的
+
+      // `adapter` 允许自定义处理请求，以使测试更轻松
+      // 返回一个 promise 并应用一个有效的响应 (查阅 [response docs](#response-api)).
+      adapter: function (config) {
+        /* ... */
+      },
+
+      // `auth` 表示应该使用 HTTP 基础验证，并提供凭据
+      // 这将设置一个 `Authorization` 头，覆写掉现有的任意使用 `headers` 设置的自定义 `Authorization`头
+      auth: {
+        username: 'janedoe',
+        password: 's00pers3cret'
+      },
+
+      // `responseType` 表示服务器响应的数据类型，可以是 'arraybuffer', 'blob', 'document', 'json', 'text', 'stream'
+      responseType: 'json', // 默认的
+
+      // `xsrfCookieName` 是用作 xsrf token 的值的cookie的名称
+      xsrfCookieName: 'XSRF-TOKEN', // default
+
+      // `xsrfHeaderName` 是承载 xsrf token 的值的 HTTP 头的名称
+      xsrfHeaderName: 'X-XSRF-TOKEN', // 默认的
+
+      // `onUploadProgress` 允许为上传处理进度事件
+      onUploadProgress: function (progressEvent) {
+        // 对原生进度事件的处理
+      },
+
+      // `onDownloadProgress` 允许为下载处理进度事件
+      onDownloadProgress: function (progressEvent) {
+        // 对原生进度事件的处理
+      },
+
+      // `maxContentLength` 定义允许的响应内容的最大尺寸
+      maxContentLength: 2000,
+
+      // `validateStatus` 定义对于给定的HTTP 响应状态码是 resolve 或 reject  promise 。如果 `validateStatus` 返回 `true` (或者设置为 `null` 或 `undefined`)，promise 将被 resolve; 否则，promise 将被 rejecte
+      validateStatus: function (status) {
+        return status >= 200 && status < 300; // 默认的
+      },
+
+      // `maxRedirects` 定义在 node.js 中 follow 的最大重定向数目
+      // 如果设置为0，将不会 follow 任何重定向
+      maxRedirects: 5, // 默认的
+
+      // `httpAgent` 和 `httpsAgent` 分别在 node.js 中用于定义在执行 http 和 https 时使用的自定义代理。允许像这样配置选项：
+      // `keepAlive` 默认没有启用
+      httpAgent: new http.Agent({ keepAlive: true }),
+      httpsAgent: new https.Agent({ keepAlive: true }),
+
+      // 'proxy' 定义代理服务器的主机名称和端口
+      // `auth` 表示 HTTP 基础验证应当用于连接代理，并提供凭据
+      // 这将会设置一个 `Proxy-Authorization` 头，覆写掉已有的通过使用 `header` 设置的自定义 `Proxy-Authorization` 头。
+      proxy: {
+        host: '127.0.0.1',
+        port: 9000,
+        auth: : {
+          username: 'mikeymike',
+          password: 'rapunz3l'
+        }
+      },
+
+      // `cancelToken` 指定用于取消请求的 cancel token
+      // （查看后面的 Cancellation 这节了解更多）
+      cancelToken: new CancelToken(function (cancel) {
+      })
+    }
+跨域请求的处理：
+1. 配置axios
+  axios.defaults.timeout = 5000
+  // 关键代码
+  axios.defaults.baseURL = '/api'
+  // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+  // 跨域请求，允许保存cookie
+  axios.defaults.withCredentials = true
+2. 在config文件夹下的index.js文件中的proxyTable字段中，作如下处理：
+  proxyTable: {
+    '/api': {
+      target: 'http://www.api.com/index.php/', // 你请求的第三方接口
+      changeOrigin: true, // 在本地会创建一个虚拟服务端，然后发送请求的数据，并同时接收请求的数据，这样服务端和服务端进行数据的交互就不会有跨域问题
+      pathRewrite: {  // 路径重写，
+        '^/api': ''  // 替换target中的请求地址，也就是说以后你在请求http://第三方接口/XXXXX这个地址的时候直接写成/api即可。
+      }
+    }
+  },
+
+
+
+安装
+cnpm install better-scroll --save
+
+1. 使用better-scroll做横向滚动
+  组件内
+  import BScroll from 'better-scroll'
+  html解构类似
+    <div class="slider" ref="slider">
+      <ul class="slider-group" ref="sliderGroup">
+        <li class="item"></li>
+        ...
+      </ul>
+    </div>
+  固定slider的宽度，动态修改sliderGroup的宽度
+  this.$nextTick(() => {
+    // 判断是否存在BScroll对象，防止重复生成引起错误
+    if (!this.scroll) {
+      this.scroll = new BScroll(this.$refs.slider, {
+        startX: 0,
+        click: true,
+        scrollX: true,
+        scrollY: false,
+        eventPassthrough: 'vertical' // 忽略竖直方向的滚动
+      })
+    } else {
+      this.scroll.refresh() // 重新属性BScroll状态
+    }
+  })
+2. 使用better-scroll做下拉加载
+  组件内
+  import BScroll from 'better-scroll'
+  参数：
+  options: {
+    pullDownRefresh: {
+      threshold: 50, // 当下拉到超过顶部 50px 时，触发 pullingDown 事件
+      stop: 0 // 刷新数据的过程中，回弹停留在距离顶部还有 20px 的位置
+    },
+    pullUpLoad: {
+      threshold: -20 // 在上拉到超过底部 20px 时，触发 pullingUp 事件
+    },
+    // pullDownRefresh: false, //关闭下拉
+    // pullUpLoad: false, // 关闭上拉
+    click: true,
+    // 当 probeType 为 1 的时候，会非实时（屏幕滑动超过一定时间后）派发scroll 事件；当 probeType 为 2 的时候，会在屏幕滑动的过程中实时的派发 scroll 事件；当 probeType 为 3 的时候，不仅在屏幕滑动的过程中，而且在 momentum 滚动动画运行过程中实时派发 scroll 事件。如果没有设置该值，其默认值为 0，即不派发 scroll 事件。
+    probeType: 3,
+    startY: 0,
+    scrollbar: false
+  }
+
+  this.scroll = new BScroll(this.$refs.bscroll, this.options)
+  this.scroll.on('scroll', (pos) => {} )
+  this.scroll.on('pullingDown', ()=>{})
+  this.scroll.on('pullingUp', ()=>{})
+
+  this.scroll.finishPullDown()
+  this.scroll.finishPullUp()
+  // 重新计算元素高度
+  this.scroll.refresh()
+  // $nextTick 将回调延迟到下次 DOM 更新循环之后执行。在修改数据之后立即使用它，然后等待 DOM 更新。
+  
+
+
+overflow:
+	visible	默认值。内容不会被修剪，会呈现在元素框之外。
+	hidden	内容会被修剪，并且其余内容是不可见的。
+	scroll	内容会被修剪，但是浏览器会显示滚动条以便查看其余的内容。
+	auto	如果内容被修剪，则浏览器会显示滚动条以便查看其余的内容。
+	inherit	规定应该从父元素继承 overflow 属性的值。
+
+cnpm install vue-paginate --save
+数据分页
+<paginate name="items" :list="items" ref="paginator" class="paginate-list">
+      <li v-for="item in paginated('items')">
+        {{ item }}
+      </li>
+    </paginate>
+    <paginate-links for="items"
+      :show-step-links="true"
+    ></paginate-links>
+    <paginate-links for="items"
+      :show-step-links="true"
+      :limit="2"
+      :step-links="{
+        next: 'N',
+        prev: 'P'
+      }"
+    ></paginate-links>
+    <paginate-links for="items" :simple="{
+      next: 'Next »',
+      prev: '« Back'
+    }"></paginate-links>
+    <span v-if="$refs.paginator">
+      Viewing {{$refs.paginator.pageItemsCount}} results
+    </span>
+
+
+data:
+	items: 数组,
+	paginate: ['items']
+
+手机端事件
+  touchstart： e.touches[0].clientX
+  touchend: e.changedTouches[0].clientX
+  touchmove:
+
+vuex导航守卫:
+  全局：
+    beforeEach, beforeResolve, afterEach
+  路由:
+    beforeEnter
+  组件内：
+    beforeRouteEnter, beforeRouteUpdate, beforeRouteLeave
+  完整的导航解析流程
+    导航被触发。
+    在失活的组件里调用离开守卫。
+    调用全局的 beforeEach 守卫。
+    在重用的组件里调用 beforeRouteUpdate 守卫 (2.2+)。
+    在路由配置里调用 beforeEnter。
+    解析异步路由组件。
+    在被激活的组件里调用 beforeRouteEnter。
+    调用全局的 beforeResolve 守卫 (2.5+)。
+    导航被确认。
+    调用全局的 afterEach 钩子。
+    触发 DOM 更新。
+    用创建好的实例调用 beforeRouteEnter 守卫中传给 next 的回调函数。
+
+日期联动插件
+cnpm install vue-awesome-picker --save
+省市区联动插件
+cnpm install v-distpicker --save
+
+
+scrollBehavior(to,form,savedPosition){
+  //scrollBehavior方法接收to，form路由对象
+  //第三个参数savedPosition当且仅当在浏览器前进后退按钮触发时才可用
+  //该方法会返回滚动位置的对象信息，如果返回false，或者是一个空的对象，那么不会发生滚动
+  //我们可以在该方法中设置返回值来指定页面的滚动位置，例如：
+  return {x:0,y:0}
+  //表示在用户切换路由时让是所有页面都返回到顶部位置
+  //如果返回savedPosition,那么在点击后退按钮时就会表现的像原生浏览器一样，返回的页面会滚动过到之前按钮点击跳转的位置，大概写法如下：
+  if(savedPosition){
+    return savedPosition
+  }else{
+   return {x:0,y:0}
+  }
+  //如果想要模拟滚动到锚点的行为:
+  if(to.hash){
+   return {
+     selector:to.hash
+   }
+  }
+}
+
+
+
+keep-alive组件
+  Props：
+    include - 字符串或正则表达式。只有名称匹配的组件会被缓存。
+    exclude - 字符串或正则表达式。任何名称匹配的组件都不会被缓存。
+    max - 数字。最多可以缓存多少组件实例。
+  用法：
+
+  <keep-alive> 包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们。和 <transition> 相似，<keep-alive> 是一个抽象组件：它自身不会渲染一个 DOM 元素，也不会出现在父组件链中。
+
+  当组件在 <keep-alive> 内被切换，它的 activated 和 deactivated 这两个生命周期钩子函数将会被对应执行。
