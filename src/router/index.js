@@ -6,6 +6,8 @@ import goodsList from "../pages/goods-list/index.vue";
 import cart from "../pages/cart/index.vue";
 import goodsDetail from "../pages/goods-detail/index.vue";
 import notfind from "../pages/goods-nofind/index.vue";
+import login from "../pages/login/index.vue";
+import register from "../pages/register/index.vue";
 
 Vue.use(VueRouter);
 
@@ -29,6 +31,16 @@ const routes = [
     path: "/notfind",
     name: "notfind",
     component: notfind
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: login
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: register
   },
   {
     path: "/goodsDetail",

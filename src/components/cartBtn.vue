@@ -23,7 +23,9 @@ export default {
         }
     },
     methods:{
-        addTocart(){
+        addTocart(e){
+            // 阻止冒泡
+            e.stopPropagation()
             if(Object.keys(this.goods).length==0){
                 return
             }

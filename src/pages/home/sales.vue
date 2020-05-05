@@ -4,14 +4,14 @@
     <swiper  :options="swiperOptions" class="swiper-container" v-if="show">
         <!-- 加入：key -->
         <swiper-slide v-for="(item,index) of pages" :key="index" class="swiper-page">
-            <div class="swiper-goods border" v-for="val of item" :key="val.id">
+            <router-link tag="div" :to="`/goodsDetail/${val.id}`" class="swiper-goods border" v-for="val of item" :key="val.id">
                 <img v-lazy="val.img" alt="" class="goods-img">
                 <div class="goods-info">
                     <div class="goods-name">{{val.name}}</div>
                     <div class="goods-price">¥{{val.price|formatPrice}}</div>
                     <cart font-size=".28rem" :goods="val"></cart>
                 </div>
-            </div>
+            </router-link>
         </swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
     </swiper>

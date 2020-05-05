@@ -2,14 +2,14 @@
     <container title="为你推荐">
         <template #content>
             <div class="goods-list">
-                <div class="goods-item border" v-for="(item,index) of list"  :key="index" >
+                <router-link tag="div" :to="`/goodsDetail/${item.id}`" class="goods-item border" v-for="(item,index) of list"  :key="index" >
                 <img v-lazy="item.img" alt="" class="goods-img">
                 <div class="goods-info">
                     <div class="goods-name">{{item.name}}</div>
                     <div class="goods-price">¥{{item.price|formatPrice}}</div>
                     <Cart font-size=".3rem" :goods="item"></Cart>
                 </div>
-            </div>
+                </router-link>
             </div>
         </template>
     </container>
