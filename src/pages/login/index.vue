@@ -1,6 +1,6 @@
 <template>
 <div class="page">
-    <Head title="登录" :back="backUrl"></Head>
+    <Head title="登录" :back="loginR"></Head>
     <div class="content" ref="content">
         <div class="login-container">
             <div class="login-content">
@@ -17,7 +17,7 @@
                 <div class="submit" @click="login">登录</div>
             </div>
             <div class="login-desc">
-                <router-link :to="'/register'">免费注册</router-link>
+                <router-link :to="`/register?url=${encodeURIComponent(loginR)}`">免费注册</router-link>
             </div>
         </div>
     </div>
@@ -62,16 +62,20 @@ export default {
             }
         }
     },
+    // 导航守卫
+    beforeRouteEnter(to, from, next) {
+        const token=Token.getToken();
+        if(token!==''){
+            next(from.path)
+        }else{
+            next(vm=>{
+                vm.backUrl='/'
+            })
+        }
+    },
     mounted(){
         document.querySelector('.page').style.height=document.documentElement.offsetHeight-44+'px';
         this.loginR = this.$route.query.url||'/';
-    },
-    // 导航守卫
-    beforeRouteEnter (to, from, next) {
-        next(vm=>{
-        // 通过 `vm` 访问组件实例
-            vm.backUrl=from.path
-        })//通过next()来渲染
     },
     methods:{
         login(){
@@ -88,7 +92,7 @@ export default {
                 Token.setToken(token)
                 this.$router.push(this.loginR)
             }).catch(err=>{
-                alert(err.message)
+                this.$showToast(err.message)
             })
         },
         Validate(data){
@@ -97,7 +101,7 @@ export default {
                     const res=this.formValidate[key](data[key],data.password);
                     // console.log(res);
                     if(res.error!=0){
-                        alert(res.message)
+                        this.$showToast(res.message)
                         return false
                     }
                 }

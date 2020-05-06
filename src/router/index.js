@@ -8,6 +8,8 @@ import goodsDetail from "../pages/goods-detail/index.vue";
 import notfind from "../pages/goods-nofind/index.vue";
 import login from "../pages/login/index.vue";
 import register from "../pages/register/index.vue";
+import coupon from "../pages/coupon/index.vue";
+import {Token} from "../utils/token"
 
 Vue.use(VueRouter);
 
@@ -41,6 +43,20 @@ const routes = [
     path: "/register",
     name: "register",
     component: register
+  },
+  {
+    path: "/coupon",
+    name: "coupon",
+    component: coupon,
+    beforeEnter(to,from,next){
+      const token=Token.getToken();
+      if(token===''){
+        const url=encodeURIComponent(from.path)
+        next(`/login?url=${url}`)
+      }else{
+        next()
+      }
+    },
   },
   {
     path: "/goodsDetail",

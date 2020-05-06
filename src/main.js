@@ -7,6 +7,7 @@ import router from "./router";
 import store from "./store";
 import loading from "./plugin/loading"
 import modal from "./plugin/modal"
+import toast from "./plugin/toast"
 // 懒加载
 import VueLazyload from 'vue-lazyload'
 // Request 和 Response 对象起到了服务器与客户机之间的信息传递作用。
@@ -34,6 +35,7 @@ Vue.use(VueLazyload, {
 })
 Vue.use(loading)
 Vue.use(modal)
+Vue.use(toast)
 
 Vue.config.productionTip = false;
 

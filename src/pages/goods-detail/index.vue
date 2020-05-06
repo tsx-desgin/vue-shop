@@ -2,7 +2,7 @@
 <div class="container">
     <Head :showMenuicon="showMenuicon" :opacity="opacity" :scrollTab="scrollTab" @change="change"></Head>
     <div class="page" ref="page">
-        <div style="height:6500px">
+        <div>
             <div id="goods">
                 <gallery :gallery="gallery"></gallery>
             </div>
@@ -67,7 +67,7 @@
             </div>
         </div>
         <div class="footer-right border-top">
-            <div class="cart">加入购物车</div>
+            <div class="cart" @click="addTocart">加入购物车</div>
             <div class="buy">立即购买</div>
         </div>
     </div>
@@ -75,6 +75,7 @@
 </template>
 <script>
 import {Token} from "@/utils/token"
+import {Storage} from "@/utils/storage"
 import gallery from './gallery'
 import Head from "./header"
 import BScroll from 'better-scroll';
@@ -90,7 +91,7 @@ export default {
         this.getGoods()
         this.initScroll()
         this.initColect()
-        Token.delToken()
+        // Token.delToken()
     },
     data(){
         return{
@@ -117,20 +118,59 @@ export default {
     },
     methods:{
         getCoupon(){
-
+            const token = Token.getToken()
+            if(token===''){
+                const url=encodeURIComponent('/goodsDetail/'+this.goods.goods_id)
+                this.$router.push(`/login?url=${url}`)
+                return;
+            }
+            const url=encodeURIComponent('/goodsDetail/'+this.id)
+            this.$router.push(`/coupon?url=${url}`)
         },
         async initColect(){
             // 判断是否登录
+            const token=Token.getToken();
+            if(token===''){
+                this.is_Colect=false;
+                return
+            }
+            await this.axios.get('shose/collect/check',{
+                params:{
+                    goods_id:this.id,
+                },
+                headers:{
+                    token
+                }
+            }).then(res=>{
+                this.is_Colect=res.collect===1;
+            })
         },
-        colect(){
+        async colect(){
             // 判断是否登录
             const token=Token.getToken();
             if(token===''){
                 const url=encodeURIComponent('/goodsDetail/'+this.id)
-                this.$router.push('/login?url='+url+'')
+                this.$router.push(`/login?url=${url}`)
+                return;
             }
             // 没有登录则跳转至登录页面
             // 若已登录，则判断是收藏还是取消收藏
+            let path='';
+            if(this.is_Colect){
+                // 取消收藏
+                path='shose/collect/cancel'
+            }else{
+                // 收藏
+                path='shose/collect/confirm'
+            }
+            this.$showLoading()
+            await this.axios.post(path,{goods_id:this.id},{
+                headers:{
+                    token
+                }
+            })
+            this.$hideLoading()
+            this.is_Colect=!this.is_Colect;
         },
         change(goods){
             this.scrollTab=goods;
@@ -138,6 +178,9 @@ export default {
         },
         initScroll(){
              this.$nextTick(() => {
+                let bodyHeight = document.documentElement.offsetHeight
+                let footerHeight = document.querySelector('.footer').offsetHeight
+                this.$refs.page.style.height = bodyHeight - footerHeight + 'px'
                 if (!this.scroll) {
                     this.scroll = new BScroll(this.$refs.page, this.scrollOptions)
                     } else {
@@ -170,12 +213,50 @@ export default {
                 }
                 this.gallery=gallery,
                 this.goods=goods
-                console.log(commentList,commentTotal,gallery,goods)
+                // console.log(commentList,commentTotal,gallery,goods)
                 
             }).catch(err=>{
                 this.$router.push('/notfind')
-                console.log(err)
+                alert(err)
             });
+        },
+         addTocart(){
+            if(this.id==0){
+                return
+            }
+            const goods=this.goods;
+            const cart=Storage.getItem('cart')||[];
+            const index=cart.findIndex(item=>item.id===this.id)
+            const cartData={
+                id:goods.goods_id,
+                img:goods.goods_img,
+                name:goods.goods_name,
+                price:goods.goods_price
+            }
+            if(index==-1){
+                cartData.selected=true,
+                cartData.buyNumber=1,
+                cart.push(cartData)
+            }else{
+                const buyNumber=cart[index].buyNumber;
+                const selected=cart[index].selected
+                cart[index]={
+                    ...cartData,
+                    selected:selected,
+                    buyNumber:1+buyNumber,
+                }
+            }
+            Storage.setItem('cart',cart)
+            this.$showModal({
+                title:'提示',
+                content:'添加购物车成功,需要前往购物车吗?',
+                btn:['是','否'],
+                success:(res)=>{
+                    if(res.confirm){
+                        this.$router.push('/cart')
+                    }
+                },
+            })
         }
     }
 }
@@ -184,7 +265,7 @@ export default {
 @import "~@/assets/scss/global";
 .page{
     width: 100%;
-    height: 4000px;
+    height: 100%;
     overflow: hidden;
     background: $color-c;
     z-index: 1000;

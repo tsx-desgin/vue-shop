@@ -1,6 +1,6 @@
 <template>
 <div class="page">
-    <Head title="注册" :back="backUrl"></Head>
+    <Head title="注册" :back="`/login?url=${encodeURIComponent(loginR)}`"></Head>
     <div class="content" ref="content">
         <div class="login-container">
             <div class="login-content">
@@ -25,7 +25,7 @@
                 <div class="submit" @click="register">注册</div>
             </div>
             <div class="login-desc">
-                <router-link :to="'/login'">去登录</router-link>
+                <router-link :to="`/login?url=${encodeURIComponent(loginR)}`">去登录</router-link>
             </div>
         </div>
     </div>
@@ -45,6 +45,7 @@ export default {
             userpwd:'',
             nickname:'',
             confirmPwd:'',
+            loginR:'',
             formValidate:{
                  username(val){
                     if(val===''){
@@ -91,13 +92,7 @@ export default {
     },
      mounted(){
         document.querySelector('.page').style.height=document.documentElement.offsetHeight-44+'px';
-    },
-     // 导航守卫
-    beforeRouteEnter (to, from, next) {
-        next(vm=>{
-        // 通过 `vm` 访问组件实例
-            vm.backUrl=from.path
-        })//通过next()来渲染
+        this.loginR = this.$route.query.url||'/';
     },
     methods:{
         register(){
@@ -112,9 +107,9 @@ export default {
                 return
             }
             this.axios.post('shose/user/register',data).then(()=>{
-                this.$router.push('/login')
+                this.$router.push(`/login?url=${encodeURIComponent(this.loginR)}`)
             }).catch(err=>{
-                alert(err.message)
+                this.$showToast(err.message)
             })
         },
         Validate(data){
@@ -123,7 +118,7 @@ export default {
                     const res=this.formValidate[key](data[key],data.password);
                     // console.log(res);
                     if(res.error!=0){
-                        alert(res.message)
+                        this.$showToast(res.message)
                         return false
                     }
                 }
