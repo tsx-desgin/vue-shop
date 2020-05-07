@@ -9,6 +9,7 @@ import notfind from "../pages/goods-nofind/index.vue";
 import login from "../pages/login/index.vue";
 import register from "../pages/register/index.vue";
 import coupon from "../pages/coupon/index.vue";
+import order from "../pages/order/index.vue";
 import {Token} from "../utils/token"
 
 Vue.use(VueRouter);
@@ -45,10 +46,16 @@ const routes = [
     component: register
   },
   {
+    path: "/order",
+    name: "order",
+    component: order
+  },
+  {
     path: "/coupon",
     name: "coupon",
     component: coupon,
     beforeEnter(to,from,next){
+      // console.log('beforeEnter')
       const token=Token.getToken();
       if(token===''){
         const url=encodeURIComponent(from.path)
@@ -112,5 +119,30 @@ const router = new VueRouter({
   // 修改router-link-exact-active
   linkExactActiveClass:'active',
 });
+
+// 需要做登录验证的路由名称
+const AUTH_ROUTER_NAME=['coupon','order']
+// 登录验证
+router.beforeEach((to, from, next) => {
+  if(AUTH_ROUTER_NAME.includes(to.name)){
+    const token=Token.getToken()
+    if(token===''){
+      console.log('to',to)
+      console.log('from',from)
+      let url
+      if(to.query.loginR!==''){
+        url=to.query.loginR;
+      }else{
+        url=from.path;
+      }
+      next(`/login?url=${url}`)
+    }else{
+      next()
+    }
+  }else{
+    next()
+  }
+})
+
 
 export default router;

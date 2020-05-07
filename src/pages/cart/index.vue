@@ -5,7 +5,9 @@
         <!-- 传参 data-goods-id='' -->
         <div class="cart-item  border-bottom" :class="{'cart-del':item.delete}" v-for="item of cart" :data-goods-id="item.id" :key="item.id" @touchstart='touchStart' @touchend='touchEnd'>
             <input type="checkBox" class="checkbox" :checked="item.selected" @click="toggleSelect(item.id)">
+            <router-link :to="`/goodsDetail/${item.id}`" class="goods-item border">
             <img class="goods-img" :src="item.img" alt="">
+            </router-link>
             <div class="goods-desc">
                 <div class="goods-name">{{item.name}}</div>
                 <div class="goods-price">
@@ -80,7 +82,13 @@ export default {
             this.total=total;
             Storage.setItem('cart',this.cart);
         },
-        submitCart(){},
+        submitCart(){
+            if(this.cartNum===0){
+                this.$showToast('至少选择一件商品')
+                return
+            }
+            this.$router.push('/order?loginR='+encodeURIComponent('/order'))
+        },
         toggleSelectAll(){
             this.cart.forEach(item=>{
                 item.selected=!this.selectAll;
