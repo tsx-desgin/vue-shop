@@ -5,7 +5,7 @@
         <!-- 传参 data-goods-id='' -->
         <div class="cart-item  border-bottom" :class="{'cart-del':item.delete}" v-for="item of cart" :data-goods-id="item.id" :key="item.id" @touchstart='touchStart' @touchend='touchEnd'>
             <input type="checkBox" class="checkbox" :checked="item.selected" @click="toggleSelect(item.id)">
-            <router-link :to="`/goodsDetail/${item.id}`" class="goods-item border">
+            <router-link tag="div" :to="`/goodsDetail/${item.id}`" class="goods-item border">
             <img class="goods-img" :src="item.img" alt="">
             </router-link>
             <div class="goods-desc">
@@ -84,7 +84,9 @@ export default {
         },
         submitCart(){
             if(this.cartNum===0){
-                this.$showToast('至少选择一件商品')
+                this.$showToast({
+                    message:'至少选择一件商品'
+                })
                 return
             }
             this.$router.push('/order?loginR='+encodeURIComponent('/order'))
@@ -183,11 +185,16 @@ export default {
 .cart-item.cart-del{
     left: -1.6rem;
 }
-.goods-img{
+.goods-item{
     width: 2.2rem;
     height: 2.2rem;
     margin-left: .2rem;
     border-radius: .2rem;
+    overflow: hidden;
+    .goods-img{
+    width: 100%;
+    height: 100%;
+}
 }
 .goods-desc{
     flex: 1;

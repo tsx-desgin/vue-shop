@@ -92,7 +92,9 @@ export default {
                 Token.setToken(token)
                 this.$router.push(this.loginR)
             }).catch(err=>{
-                this.$showToast(err.message)
+                this.$showToast({
+                    message:err.message
+                })
             })
         },
         Validate(data){
@@ -101,7 +103,9 @@ export default {
                     const res=this.formValidate[key](data[key],data.password);
                     // console.log(res);
                     if(res.error!=0){
-                        this.$showToast(res.message)
+                        this.$showToast({
+                            message:res.message
+                        })
                         return false
                     }
                 }

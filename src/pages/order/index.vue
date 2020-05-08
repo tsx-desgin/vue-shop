@@ -1,20 +1,26 @@
 <template>
 <div class="page">
     <Head title="确认订单" :back="backUrl"></Head>
+    <Address :address="address"></Address>
 </div>
 </template>
 <script>
 import Head from "@/components/head"
+import Address from "./address"
 import {Token} from "../../utils/token"
+import {Storage} from "../../utils/storage"
 const USER_TOKEN=Token.getToken();
 export default {
     components:{
-        Head
+        Head,
+        Address,
     },
     data(){
         return{
+            address:{},
             backUrl:'',
-            goods:[]
+            goods:[],
+            coupon:[]
         }
     },
     beforeRouteEnter (to, from, next) {
@@ -24,9 +30,24 @@ export default {
         })//通过next()来渲染
     },
     mounted(){
+        this.initCart()
         this.getUserAddress()
+        this.getUserCoupon()
     },
     methods:{
+        initCart(){
+            const cart=Storage.getItem('cart');
+            if(cart.length===0){
+                this.$showToast({
+                    message:'至少选择一件商品',
+                    callback:()=>{
+                        this.$router.push('/cart')
+                    }
+                })
+                return
+            }
+            this.goods=cart
+        },
         async getUserAddress(){
             const address=await this.axios.get('shose/address/default',{
                 headers:{
@@ -34,6 +55,21 @@ export default {
                 }
             })
             this.address=address||{};
+        },
+        async getUserCoupon(){
+            const coupon=await this.axios.get('shose/coupon/get',{
+                headers:{
+                    token:USER_TOKEN
+                }
+            }).then(res=>res.coupon)
+            this.coupon=coupon.filter(item=>{
+                if(item.is_use===1){
+                    return false
+                }else{
+                    return item.expires_time*1000>Date.now()
+                }
+            })
+            console.log(this.coupon)
         }
     }
 }
@@ -43,7 +79,8 @@ export default {
 .page{
   width: 100%;
   height: 100%;
+  padding: $head-h .2rem 0;
+  box-sizing: border-box;
   background: #f2f2f2;
-  padding-top:$head-h ;
 }
 </style>

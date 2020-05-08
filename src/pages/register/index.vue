@@ -109,7 +109,9 @@ export default {
             this.axios.post('shose/user/register',data).then(()=>{
                 this.$router.push(`/login?url=${encodeURIComponent(this.loginR)}`)
             }).catch(err=>{
-                this.$showToast(err.message)
+                this.$showToast({
+                    message:err.message
+                })
             })
         },
         Validate(data){
@@ -118,7 +120,9 @@ export default {
                     const res=this.formValidate[key](data[key],data.password);
                     // console.log(res);
                     if(res.error!=0){
-                        this.$showToast(res.message)
+                        this.$showToast({
+                            message:res.message
+                        })
                         return false
                     }
                 }
