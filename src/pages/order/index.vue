@@ -1,6 +1,6 @@
 <template>
 <div class="page">
-    <Head title="确认订单" :back="backUrl"></Head>
+    <Head title="确认订单" :back="'/cart'"></Head>
     <Address :address="address"></Address>
 </div>
 </template>
@@ -23,12 +23,12 @@ export default {
             coupon:[]
         }
     },
-    beforeRouteEnter (to, from, next) {
-        next(vm=>{
-        // 通过 `vm` 访问组件实例
-            vm.backUrl=from.path;
-        })//通过next()来渲染
-    },
+    // beforeRouteEnter (to, from, next) {
+    //     next(vm=>{
+    //     // 通过 `vm` 访问组件实例
+    //         vm.backUrl=from.path;
+    //     })//通过next()来渲染
+    // },
     mounted(){
         this.initCart()
         this.getUserAddress()
@@ -55,6 +55,7 @@ export default {
                 }
             })
             this.address=address||{};
+            console.log(address)
         },
         async getUserCoupon(){
             const coupon=await this.axios.get('shose/coupon/get',{

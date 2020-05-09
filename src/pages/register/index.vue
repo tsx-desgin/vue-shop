@@ -34,6 +34,8 @@
 
 <script>
 import Head from "@/components/head"
+import registerValidate from "../../validate/register"
+import {validate} from '../../utils/function'
 export default {
     components:{
         Head
@@ -46,48 +48,7 @@ export default {
             nickname:'',
             confirmPwd:'',
             loginR:'',
-            formValidate:{
-                 username(val){
-                    if(val===''){
-                        return {error:1,message:'账号为空'}
-                    }
-                    if(val.length<=3){
-                        return {error:1,message:'账号长度要大于3'}
-                    }
-                    return {error:0}
-                },
-                password(val){
-                    if(val===''){
-                        return {error:1,message:'密码为空'}
-                    }
-                    if(val.length<=3){
-                        return {error:1,message:'密码长度要大于3'}
-                    }
-                    if(/^[a-z]/i.test(val)===false){
-                        return {error:1,message:'密码要以字母开头'}
-                    }
-                    return {error:0}
-                },
-                confirmPwd(val,password){
-                     if(val===''){
-                        return {error:1,message:'确认密码为空'}
-                    }
-                    if(val!=password){
-                        // console.log(password)
-                        return {error:1,message:'确认密码跟密码不一致'}
-                    }
-                    return {error:0}
-                },
-                 nickname(val){
-                     if(val===''){
-                        return {error:1,message:'昵称为空'}
-                    }
-                    if(/[\u4e00-\u9fa5]/.test(val)===false){
-                        return {error:1,message:'昵称必须包含中文'}
-                    }
-                    return {error:0}
-                },
-            }
+            
         }
     },
      mounted(){
@@ -102,8 +63,11 @@ export default {
                 confirmPwd:this.confirmPwd,
                 nickname:this.nickname,
             }
-            const validate=this.Validate(data);
-            if(!validate){
+            const res=validate(data,registerValidate);
+            if(res.error!=0){
+                this.$showToast({
+                    message:res.message
+                })
                 return
             }
             this.axios.post('shose/user/register',data).then(()=>{
@@ -114,21 +78,6 @@ export default {
                 })
             })
         },
-        Validate(data){
-            for(let key in data){
-                if(Reflect.has(this.formValidate,key)){
-                    const res=this.formValidate[key](data[key],data.password);
-                    // console.log(res);
-                    if(res.error!=0){
-                        this.$showToast({
-                            message:res.message
-                        })
-                        return false
-                    }
-                }
-            }
-            return true
-        }
     }
 }
 </script>

@@ -25,7 +25,21 @@ function dateFormat(fmt,date){
     }
     return fmt;
 }
+
+const validate =function(data,validateObj){
+    for(let key in data){
+        if(Reflect.has(validateObj,key)){
+            const res=validateObj[key](data[key],data.password);
+            // console.log(res);
+            if(res.error!=0){
+                return res;
+            }
+        }
+    }
+    return {error:0}
+}
 export{
     formatPrice,
-    dateFormat
+    dateFormat,
+    validate,
 }

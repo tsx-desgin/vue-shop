@@ -27,6 +27,8 @@
 <script>
 import Head from "@/components/head"
 import {Token} from "@/utils/token"
+import loginValidate from "../../validate/login"
+import {validate} from '../../utils/function'
 export default {
     components:{
         Head,
@@ -37,29 +39,6 @@ export default {
             username:'',
             loginR:'',
             userpwd:'',
-            formValidate:{
-                 username(val){
-                    if(val===''){
-                        return {error:1,message:'账号为空'}
-                    }
-                    if(val.length<=3){
-                        return {error:1,message:'账号长度要大于3'}
-                    }
-                    return {error:0}
-                },
-                password(val){
-                    if(val===''){
-                        return {error:1,message:'密码为空'}
-                    }
-                    if(val.length<=3){
-                        return {error:1,message:'密码长度要大于3'}
-                    }
-                    if(/^[a-z]/i.test(val)===false){
-                        return {error:1,message:'密码要以字母开头'}
-                    }
-                    return {error:0}
-                },
-            }
         }
     },
     // 导航守卫
@@ -83,8 +62,11 @@ export default {
                 username:this.username,
                 password:this.userpwd,
             }
-            const validate=this.Validate(data);
-            if(!validate){
+            const res=validate(data,loginValidate);
+            if(res.error!==0){
+                this.$showToast({
+                    message:res.message
+                })
                 return
             }
             this.axios.post('shose/user/login',data).then(res=>{
@@ -97,21 +79,6 @@ export default {
                 })
             })
         },
-        Validate(data){
-            for(let key in data){
-                if(Reflect.has(this.formValidate,key)){
-                    const res=this.formValidate[key](data[key],data.password);
-                    // console.log(res);
-                    if(res.error!=0){
-                        this.$showToast({
-                            message:res.message
-                        })
-                        return false
-                    }
-                }
-            }
-            return true
-        }
     }
 }
 </script>

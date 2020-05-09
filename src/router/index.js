@@ -10,8 +10,8 @@ import login from "../pages/login/index.vue";
 import register from "../pages/register/index.vue";
 import coupon from "../pages/coupon/index.vue";
 import order from "../pages/order/index.vue";
+import orderAddress from "../pages/order-address/index.vue";
 import user from "../pages/user/index.vue";
-import UserAddress from "../pages/user-address/index.vue";
 import UserAddAddress from "../pages/UserAddAddress/index.vue";
 import {Token} from "../utils/token"
 
@@ -62,13 +62,18 @@ const routes = [
     //     path:'address',
     //     name:"userAddress",
     //     component:userAddress
-    //   }
-    // ]
+    //   },
+    //   {
+    //     path:'/user/add-address',
+    //     name:"UserAddAddress",
+    //     component:UserAddAddress
+    //   },
+    //   ]
   },
   {
-    path:'/user/address',
-    name:"UserAddress",
-    component:UserAddress
+    path:'/order/address',
+    name:"orderAddress",
+    component:orderAddress
   },
   {
     path:'/user/add-address',
@@ -146,7 +151,7 @@ const router = new VueRouter({
 });
 
 // 需要做登录验证的路由名称
-const AUTH_ROUTER_NAME=['coupon','order','UserAddress','UserAddAddress']
+const AUTH_ROUTER_NAME=['coupon','order','UserAddress','UserAddAddress','orderAddress']
 // 登录验证
 router.beforeEach((to, from, next) => {
   if(AUTH_ROUTER_NAME.includes(to.name)){

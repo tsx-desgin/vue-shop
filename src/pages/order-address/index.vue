@@ -1,6 +1,22 @@
 <template>
 <div class="page">
-    <Head title="编辑地址" :back="$route.query!==''?'/order?loginR='+encodeURIComponent($route.query.url)+'':backUrl"></Head>
+    <Head title="选择地址" :back="$route.query!==''?'/order?loginR='+encodeURIComponent($route.query.url)+'':backUrl"></Head>
+    <div class="address-list">
+        <div class="address">
+            <div class="address-item" v-for="item of address" :key="item.id">
+                <div class="address-content">
+                    <div class="address-name">
+                        <span>收货人:{{item.name}}</span>
+                        <span>{{item.phone}}</span>
+                    </div>
+                </div>
+                <div class="address-detail">
+                    收货地址:{{item.detail}}
+                </div>
+                <span class="icon">&#xe607;</span>
+            </div>
+        </div>
+    </div>
     <div class="Address" v-if="showAddress" @click="$router.push('/user/add-address?id='+$route.query.id+'&url='+encodeURIComponent($route.query.url))">新增收货地址</div>
 </div>
 </template>
@@ -37,8 +53,14 @@ export default {
                 headers:{
                     token:USER_TOKEN
                 }
-            }).then(res=>res.address)
+            }).then(res=>res.address.map(item=>{
+                item.detail=`${item.province}${item.city}${item.area}${item.address}`,
+                    item.selected=item.id===this.addressId
+            })
+            
+            )
             this.showAddress=(MAX_ADDRESS_NUM-this.address.length)>0
+            console.log(this.address)
         }
     }
 }
