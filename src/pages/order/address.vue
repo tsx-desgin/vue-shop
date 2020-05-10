@@ -37,7 +37,7 @@ export default {
             const id = this.address.id||0;
             const url=encodeURIComponent('/order')
             this.$router.push(`/order/address?id=${id}&url=${url}`)
-            console.log('11',this.$route)
+            // console.log('11',this.$route)
         }
     }
 }
@@ -65,6 +65,7 @@ export default {
         width:0;
         flex: 1;
         height: 100%;
+        margin-left:.2rem ;
         .address-detail{
             width: 100%;
             height: 100%;

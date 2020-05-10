@@ -3,15 +3,15 @@
     <Head title="选择地址" :back="$route.query!==''?'/order?loginR='+encodeURIComponent($route.query.url)+'':backUrl"></Head>
     <div class="address-list">
         <div class="address">
-            <div class="address-item" v-for="item of address" :key="item.id">
+            <div class="address-item border-bottom" :class="{selected:item.selected}" v-for="item of address" :key="item.id" @click="chooseAddress(item.id)">
                 <div class="address-content">
                     <div class="address-name">
-                        <span>收货人:{{item.name}}</span>
+                        <span>收货人:&nbsp;{{item.name}}</span>
                         <span>{{item.phone}}</span>
                     </div>
-                </div>
                 <div class="address-detail">
-                    收货地址:{{item.detail}}
+                    收货地址:&nbsp;{{item.detail}}
+                </div>
                 </div>
                 <span class="icon">&#xe607;</span>
             </div>
@@ -45,22 +45,28 @@ export default {
         })//通过next()来渲染
     },
     mounted(){
+        document.querySelector('.page').style.height=document.documentElement.offsetHeight-176+'px'
         this.getUserAddress()
     },
     methods:{
+        chooseAddress(id){
+            this.$route.query.id=id
+            this.$router.push('/order?loginR='+encodeURIComponent(this.$route.query.url)+'&id='+id)
+        },
         async getUserAddress(){
             this.address=await this.axios.get('shose/address',{
                 headers:{
                     token:USER_TOKEN
                 }
-            }).then(res=>res.address.map(item=>{
-                item.detail=`${item.province}${item.city}${item.area}${item.address}`,
-                    item.selected=item.id===this.addressId
+            }).then(res=>{
+                res.address.map(item=>{
+                    item.detail=`${item.province}${item.city}${item.area}${item.address}`;
+                    item.selected=item.id==this.addressId;
+                })
+                return res.address
             })
-            
-            )
             this.showAddress=(MAX_ADDRESS_NUM-this.address.length)>0
-            console.log(this.address)
+            console.log(this.address,this.addressId)
         }
     }
 }
@@ -69,10 +75,11 @@ export default {
 @import "~@/assets/scss/global";
 .page{
   width: 100%;
-  height: 100%;
-  padding: $head-h .2rem .9rem;
+//   height: 100%;
+  padding: $head-h 0 .9rem;
   box-sizing: border-box;
-  background: #fff;
+  background: #eee;
+  overflow: hidden;
   .Address{
       position: fixed;
       bottom: 0;
@@ -84,6 +91,50 @@ export default {
       @include flex;
       font-size: .32rem;
       z-index: 999;
+  }
+  .address-list{
+      width: 100%;
+      margin-top:.2rem ;
+      .address-item{
+          width: 100%;
+          height: 1.76rem;
+          background: #fff;
+          padding: .4rem .32rem;
+          box-sizing: border-box;
+          @include flex;
+          .address-content{
+              width: 0;
+              flex: 1;
+              color: #666;
+              height: 100%;
+              font-size:.24rem;
+              .address-name{
+                  font-size:.32rem ;
+                  height: .42rem;
+                  margin-bottom:.2rem ;
+                  @include flex($justify:space-between)
+              }
+              .address-detail{
+                line-height: .35rem;
+              }
+          }
+          .icon{
+              font-size: .4rem;
+              color: #fff;
+              @include flex;
+              width: .5rem;
+              height: 100%;
+          }
+          &.selected{
+              background: #5e6b85;
+              .address-content{
+                width: 0;
+                flex: 1;
+                height: 100%;
+                color: #ffffff;
+              }
+          }
+      }
   }
 }
 </style>
