@@ -86,7 +86,7 @@ export default {
         this.$hideLoading()
     },
     methods:{
-        submitOrder(){
+        async submitOrder(){
             const token = Token.getToken()
             if(token===''){
                 this.$router.push('/login?url='+encodeURIComponent(this.$route.query.url||'/order'))
@@ -98,8 +98,8 @@ export default {
                 })
                 return
             }
-            console.log(this.cart.length)
-            if(this.cart.length===0){
+
+            if(this.goods.length===0){
                 this.$showToast({
                     message:'请选择商品'
                 })
@@ -110,7 +110,7 @@ export default {
             }
             data.address_id=address.id;
             data.goods=[];
-            this.cart.forEach(item=>{
+            this.goods.forEach(item=>{
                 data.goods.push({
                     goods_id:item.id,
                     count:item.buyNumber,
@@ -122,7 +122,25 @@ export default {
                     data.coupon_id=selectCoupon[0].id;
                 }
             }
-            console.log(data)
+            this.$showLoading()
+            const res=await this.axios.post('shose/order',data,{
+                headers:{
+                    token
+                }
+            }).then(res=>{
+                if(res.pass){
+                    this.$router.replace('')
+                }
+            }).catch((err)=>{
+                this.$showToast({
+                    message:err.message,
+                    callback:()=>{
+                        this.$router.replace('/cart')
+                    }
+                })
+            }).finally(()=>{
+                this.$hideLoading()
+            })
         },
         choose(couponId){
             // const index=this.coupon.findIndex(item=>item.id===couponId);
@@ -224,7 +242,7 @@ export default {
                     return item
                 }
             })
-            this.coupon=this.coupon.reverse.slice(0,2)
+            this.coupon=this.coupon.slice(0,2)
             Storage.setItem('coupon',this.coupon)
             // console.log(this.coupon)
         }

@@ -104,7 +104,7 @@ const routes = [
     beforeEnter(to,from,next){
       const id=to.params.id;
       if(!/^\d+$/.test(id)){
-        next(from.path)
+        next(to.path)
       }else{
         next()
       }
