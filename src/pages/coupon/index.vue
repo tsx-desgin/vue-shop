@@ -26,6 +26,7 @@ import Head from "@/components/head"
 import {Token} from "../../utils/token"
 import {filters} from '@/utils/mixins'
 import {dateFormat,formatPrice} from '@/utils/function'
+import {Storage} from '@/utils/storage'
 const USER_TOKEN=Token.getToken();
 export default { 
     components:{
@@ -67,9 +68,14 @@ export default {
                     token:USER_TOKEN
                 }
             }).then(()=>{
-                this.$showToast('领取成功')
+                this.$showToast({
+                    message:'领取成功'
+                })
+                Storage.deleteItem('coupon')
             }).catch(err=>{
-                this.$showToast(err.message||'兑换失败')
+                this.$showToast({
+                    message:err.message||'兑换失败'
+                })
             }).finally(()=>{
                 this.$hideLoading()
             })
