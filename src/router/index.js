@@ -10,6 +10,7 @@ import login from "../pages/login/index.vue";
 import register from "../pages/register/index.vue";
 import coupon from "../pages/coupon/index.vue";
 import order from "../pages/order/index.vue";
+import orderPay from "../pages/order-pay/index.vue";
 import orderAddress from "../pages/order-address/index.vue";
 import user from "../pages/user/index.vue";
 import UserAddAddress from "../pages/UserAddAddress/index.vue";
@@ -52,6 +53,19 @@ const routes = [
     path: "/order",
     name: "order",
     component: order
+  },
+  {
+    path: "/order/pay",
+    beforeEnter(to,from,next){
+      const id=to.query.id;
+      if(!/^\d+$/.test(id)){
+        next('/')
+      }else{
+        next()
+      }
+    },
+    name: "orderPay",
+    component: orderPay
   },
   {
     path: "/user",
@@ -151,21 +165,25 @@ const router = new VueRouter({
 });
 
 // 需要做登录验证的路由名称
-const AUTH_ROUTER_NAME=['coupon','order','UserAddress','UserAddAddress','orderAddress']
+const AUTH_ROUTER_NAME=['coupon','order','UserAddress','UserAddAddress','orderAddress','orderPay']
 // 登录验证
 router.beforeEach((to, from, next) => {
   if(AUTH_ROUTER_NAME.includes(to.name)){
     const token=Token.getToken()
-    if(token===''){
+    if(token===''&&to.query.loginR!=undefined){
       console.log('to',to)
       console.log('from',from)
       let url
-      if(to.query.loginR!==''){
+      if(to.query.loginR){
         url=to.query.loginR;
       }else{
-        url=from.path;
+        url=to.path;
       }
-      next(`/login?url=${url}`)
+      if(url==undefined){
+        next('/login')
+      }else{
+        next(`/login?url=${url}`)
+      }
     }else{
       next()
     }

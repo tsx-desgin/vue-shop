@@ -123,13 +123,33 @@ export default {
                 }
             }
             this.$showLoading()
-            const res=await this.axios.post('shose/order',data,{
+            await this.axios.post('shose/order',data,{
                 headers:{
                     token
                 }
             }).then(res=>{
                 if(res.pass){
-                    this.$router.replace('')
+                    // 清空购物车中已经购买成功的商品
+                    const cartAll = Storage.getItem('cart');
+                    // const coupon =Storage.getItem('coupon')
+                    const cart =cartAll.filter(item=>{
+                       const index= this.goods.findIndex(val=>val.id==item.id)
+                       return index===-1
+                    })
+                    if(cart.length>0){
+                        Storage.setItem('cart',cart);
+                    }else{
+                        Storage.deleteItem('cart')
+                    }
+                    // 清除已经使用的
+                    // const couponselect=coupon.filter(item=>item.selected==false)
+                    // if(couponselect.length>0){
+                    //     Storage.setItem('coupon',couponselect)
+                    // }else{
+                    //     Storage.setItem('coupon',[])
+                    // }
+                    Storage.deleteItem('coupon')
+                    this.$router.replace('/order/pay?id='+res.order_id)
                 }
             }).catch((err)=>{
                 this.$showToast({
@@ -198,7 +218,7 @@ export default {
             const UserAddress=Storage.getItem('address');
             if(Object.keys(UserAddress).length>0){
                 if(UserAddress.id!=undefined&&UserAddress.id!=this.addressId){
-                    console.log(this.$route.query.id)
+                    // console.log(this.$route.query.id)
                     this.address=await this.axios.get('shose/address/default',{
                         headers:{
                             token:USER_TOKEN
@@ -225,10 +245,15 @@ export default {
             Storage.setItem('address',this.address);
         },
         async getUserCoupon(){
-            const UserCoupon=Storage.getItem('coupon');
-            if(UserCoupon.length>0){
-                this.coupon=UserCoupon.filter(item=>item.is_use===0&&item.expires_time*1000>Date.now())
-                this.coupon=this.coupon.slice(0,2)
+            const USER_TOKEN=Token.getToken();
+            const UserCoupon=Storage.getItem('coupon')||[]
+            let Coupon=UserCoupon.filter(item=>{
+                return item!=null;
+            });
+            console.log(Coupon)
+            Storage.setItem('coupon',Coupon)
+            if(Coupon.length>0){
+                this.coupon=Coupon.filter(item=>item.is_use===0&&item.expires_time*1000>Date.now()&&item!=null)
                 return
             }
             const coupon=await this.axios.get('shose/coupon/get',{
@@ -242,9 +267,11 @@ export default {
                     return item
                 }
             })
-            this.coupon=this.coupon.slice(0,2)
+            this.coupon=this.coupon.filter(item=>{
+                item!=null;
+            })
             Storage.setItem('coupon',this.coupon)
-            // console.log(this.coupon)
+            console.log(this.coupon)
         }
     }
 }

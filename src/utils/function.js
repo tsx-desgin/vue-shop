@@ -1,3 +1,4 @@
+import {config} from '../../src/config/config'
 // 过滤price
 const formatPrice=function(price){
     const arr=price.toString().split('.');
@@ -38,8 +39,14 @@ const validate =function(data,validateObj){
     }
     return {error:0}
 }
+
+const getOrderStatus = function(status){
+    const {order:{status:statusOptions}}=config;
+    return statusOptions[status]||''
+}
 export{
     formatPrice,
     dateFormat,
     validate,
+    getOrderStatus,
 }
