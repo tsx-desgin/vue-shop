@@ -9,6 +9,24 @@
     <div class="order-total">
         实付款:<span>¥ {{order.totalPrice}}</span>
     </div>
+    <div class="order-goods">
+        <div class="flag">
+            <span class="icon" @click="showGoods=!showGoods">
+                {{showGoods?'&#xe617;':'&#xe613;'}}
+            </span>
+        </div>
+        <div class="goods-constainer" v-show="showGoods">
+            <div class="goods-item" v-for="item of order.goods" :key="item.goods_id">
+                <img :src="item.goods_img" alt="" class="goods-img">
+                <div class="goods-desc">
+                    <div class="name">{{item.goods_name}}</div>
+                    <div class="price">¥{{item.goods_price}}</div>
+                    <div class="buyNumber">x{{item.buy_number}}</div>
+                    <div class=" shaky">7天无理由退款</div>
+                </div>
+            </div>
+       </div>
+    </div>
     <div class="order-address">
         <div class="row">
             <span>收货人: </span>
@@ -23,6 +41,19 @@
             <p>{{order.address.province}} {{order.address.city}} {{order.address.area}} {{order.address.address}}</p>
         </div>
     </div>
+    <div class="choose-pay" v-if="order.status<=1">
+        <div class="pay-cell" :class="{active:payType===1}" @click="payType=1">
+            <img :src="weipay" alt="">
+        </div>
+        <div class="pay-cell" :class="{active:payType===2}" @click="payType=2">
+            <img :src="alipay" alt="">
+        </div>
+    </div>
+    <div class="opration">
+        <span class="opration-btn" v-if="order.status<=1">支付订单</span>
+        <span class="opration-btn" v-else>支付订单</span>
+        <router-link to="/" class="opration-btn">返回首页</router-link>
+    </div>
 </div>
 </template>
 <script>
@@ -36,7 +67,11 @@ export default {
     data(){
         return{
             orderId:0,
-            order:{}
+            order:{},
+            weipay:'/weipay.svg',
+            alipay:'/alipay.svg',
+            payType:1,
+            showGoods:false,
         }
     },
     computed:{
@@ -75,7 +110,7 @@ export default {
 .page{
   width: 100%;
   height: 100%;
-  padding-top: $head-h;
+  padding: $head-h 0;
   box-sizing: border-box;
   background: #f2f2f2;
   .order-status{
@@ -122,5 +157,96 @@ export default {
            }
        }
    }
+   .choose-pay{
+       width: 100%;
+       height: 1rem;
+       margin-top:.4rem ;
+       @include flex; 
+       .pay-cell{
+           width: 40%;
+           height: 100%;
+           @include flex; 
+           border: 1px solid #f2f2f2;
+           box-sizing: border-box;
+           border-radius:.1rem ;
+           img{
+               width:.8rem;
+               height: .8rem;
+           }
+           &.active{
+               border: 1px solid $color-a;
+           }
+       }
+   }
+   .opration{
+       width: 100%;
+       height: .6rem;
+       margin-top: 1rem;
+       @include flex($justify:space-around);
+       padding: 0 .8rem;
+       box-sizing: border-box;
+       .opration-btn{
+           width:1.56rem;
+           height: 100%;
+           box-sizing: border-box;
+           border-radius: .3rem;
+           border:1px solid $color-a;
+           color: $color-a;
+           @include flex
+       }
+   }
+   .order-goods{
+       width: 100%;
+       padding: 0 .4rem;
+       box-sizing: border-box;
+       margin-top:.6rem ;
+       .flag{
+           width: 100%;
+           height: .6rem;
+           @include flex($justify:flex-end);
+           .icon{
+               font-size:.6rem;
+           }
+       }
+   }
+   .goods-constainer{
+      width: 100%;
+      background: #fff;
+      padding: .2rem;
+      box-sizing: border-box;
+      border-radius: .1rem;
+      margin:.2rem 0;
+      .goods-item{
+          width: 100%;
+          height: 1.8rem;
+          @include flex;
+          margin-bottom:.2rem;
+          .goods-img{
+              width: 1.8rem;
+              height: 1.8rem;
+          }
+          .goods-desc{
+              width:0;
+              flex: 1;
+              margin-left:.2rem ;
+              height: 90%;
+              @include flex(column,$justify:space-between,$align:flex-start);
+              font-size:.24rem ;
+              color: $color-d;
+              .name,.price{
+                 color:#333;
+              }
+              .shaky{
+                  background: rgb(255, 241, 235);
+                  white-space: nowrap;
+                  line-height: 12px;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  font-size: .24rem;
+                  color:#ff5000 ;
+              }
+           }
+      }
+  }
 }
 </style>
