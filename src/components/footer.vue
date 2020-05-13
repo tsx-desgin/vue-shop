@@ -17,10 +17,10 @@
         <span class="icon">&#xe669;</span>
         <span>购物车</span>
     </router-link>
-    <div class="footer-nav">
+    <router-link to="/user" tag="div" class="footer-nav">
         <span class="icon">&#xe651;</span>
         <span>我的</span>
-    </div>
+    </router-link>
 </div>
 </template>
 <script>

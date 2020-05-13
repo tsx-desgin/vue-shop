@@ -51,8 +51,11 @@
     </div>
     <div class="opration">
         <span class="opration-btn" v-if="order.status<=1">支付订单</span>
-        <span class="opration-btn" v-else>支付订单</span>
+        <span class="opration-btn" v-else>查看订单</span>
         <router-link to="/" class="opration-btn">返回首页</router-link>
+    </div>
+    <div class="pay-type" v-if="order.status<=1">
+        <img :src="payType==1?weichat:ali" alt="">
     </div>
 </div>
 </template>
@@ -72,6 +75,8 @@ export default {
             alipay:'/alipay.svg',
             payType:1,
             showGoods:false,
+            weichat:'/weichat.png',
+            ali:'/ali.jpg',
         }
     },
     computed:{
@@ -246,6 +251,15 @@ export default {
                   color:#ff5000 ;
               }
            }
+      }
+  }
+  .pay-type{
+      width: 100%;
+      padding: .2rem;
+      box-sizing: border-box;
+      @include flex;
+      img{
+          width: 70%;
       }
   }
 }

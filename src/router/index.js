@@ -162,15 +162,18 @@ const router = new VueRouter({
   routes,
   // 修改router-link-exact-active
   linkExactActiveClass:'active',
+  scrollBehavior(){
+    return {x:0,y:0}
+  }
 });
 
 // 需要做登录验证的路由名称
-const AUTH_ROUTER_NAME=['coupon','order','UserAddress','UserAddAddress','orderAddress','orderPay']
+const AUTH_ROUTER_NAME=['coupon','order','user','UserAddress','UserAddAddress','orderAddress','orderPay']
 // 登录验证
 router.beforeEach((to, from, next) => {
   if(AUTH_ROUTER_NAME.includes(to.name)){
     const token=Token.getToken()
-    if(token===''&&to.query.loginR!=undefined){
+    if(token===''){
       console.log('to',to)
       console.log('from',from)
       let url
@@ -179,11 +182,7 @@ router.beforeEach((to, from, next) => {
       }else{
         url=to.path;
       }
-      if(url==undefined){
-        next('/login')
-      }else{
         next(`/login?url=${url}`)
-      }
     }else{
       next()
     }

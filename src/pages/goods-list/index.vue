@@ -59,7 +59,9 @@ export default {
         sortGoodslist(goods_sortField){
             this.sortField=goods_sortField;
             this.resetData();
-            this.getList();
+            // this.getList();
+            // console.log(this.list)
+            // this.loadMore();
         },
         resetData(){
             this.list=[];
@@ -67,18 +69,20 @@ export default {
             this.totalPage=0;
             this.page=1;
             if(this.sortField!=='goods_price'){
-                if(this.sortType==''){
-                    this.sortType='asc'
-                }
+                this.sortType='';
             }else{
-                this.sortType=this.sortType==='asc'?'desc':'asc'
+                if(this.sortType==''){
+                    this.sortType='asc';
+                }else{
+                    this.sortType=this.sortType==='asc'?'desc':'asc'
+                }
             }
         },
         async getCidByCname(){
+             if(this.catId>0||this.pid>0){
+                return
+            }
             if(this.cname!==''&&this.cid===0){
-                if(this.catId>0||this.pid>0){
-                    return
-                }
                 const res = await this.axios.get('api/category/cid',{params:{name:this.cname}})
                 if(res.parent){
                     this.pid=res.cat_id;
@@ -99,21 +103,22 @@ export default {
             sortType:this.sortType,
             }
         });
-        this.$hideLoading()
-        this.list=this.list.concat(goods);
-        if(this.page===1){
-            this.totalPage=Math.ceil(total/this.count);
-        }
-        this.page++;
+            this.$hideLoading()
+            this.list=this.list.concat(goods);
+            console.log(this.list)
+            if(this.page===1){
+                this.totalPage=Math.ceil(total/this.count);
+            }
+            this.page++;
         },
         async loadMore(){
-        await this.getCidByCname()
-        this.busy=true;
-        if(this.page<=this.totalPage||this.totalPage===0){
-            await this.getList();
-            this.busy=false;
-        }
-    },
+            await this.getCidByCname()
+            this.busy=true;
+            if(this.page<=this.totalPage||this.totalPage===0){
+                await this.getList();
+                this.busy=false;
+            }
+        },
     },
     // 导航守卫
     beforeRouteEnter (to, from, next) {
