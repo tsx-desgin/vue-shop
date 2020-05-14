@@ -3,10 +3,10 @@
     <Head title="我的"></Head>
     <div class="user-container">
         <div class="user-wrapper">
-            <img :src="user.avatar" alt="" class="user-avatar">
-            <input type="file" accept="image/*">
+            <img v-lazy="user.avatar" alt="" class="user-avatar">
+            <input type="file" accept="image/*" @change="chooseAvatar">
             <div class="user">
-                <div class="nickname">{{user.nickname}}<span>lv{{user.level}}</span></div>
+                <div class="nickname" @click="$router.push('/user/userInfo')">{{user.nickname}}<span>lv{{user.level}}</span></div>
                 <div class="user-point">积分: <span class="point">{{user.points}}</span></div>
             </div>
             <div class="user-sign icon">
@@ -90,30 +90,59 @@
 import Head from "@/components/head"
 import comFooter from "@/components/footer";
 import {Token} from "../../utils/token"
+import {mapState, mapActions} from 'vuex'
 export default {
     components:{
         Head,
         comFooter,
     },
-    data(){
-        return{
-            user:{}
-        }
+    computed:{
+        ...mapState(['user'])
     },
     mounted(){
+        this.getUser(this.axios)
         document.querySelector('.page').style.height=document.documentElement.offsetHeight-176+'px';
-        this.getUser()
     },
     methods:{
-        async getUser(){
+        ...mapActions(['getUser']),
+        chooseAvatar(e){
             const token=Token.getToken()
-            const User=await this.axios.get('/api/user',{
-                headers:{
-                    token
+            if(e.target.files.length>0){
+                const file=e.target.files[0];
+                const Reg=/image+/.test(file.type);
+                if(!Reg){
+                    this.$showToast({
+                        message:'文件类型不正确,请选择图片',
+                    })
+                    return;
                 }
-            })
-            this.user=User
-        }
+                const MaxSize=1024*1024*2;
+                if(file.size>MaxSize){
+                    this.$showToast({
+                        message:'图片过大,请重新选择图片',
+                    })
+                    return;
+                }
+                let data = new FormData(); //创建form对象
+                data.append('image',file)
+                this.$showLoading()
+                this.axios.post('api/user/avatar',data,{
+                    headers:{
+                        token,
+                        // 通过二进制的方式传递
+                        'Content-Type':'multipart/form-data',
+                    }
+                }).then(res=>{
+                    this.user.avatar=res.src;
+                }).catch(err=>{
+                    this.$showToast({
+                        message:err.message,
+                    })
+                }).finally(()=>{
+                    this.$hideLoading()
+                })
+            }
+        },
     }   
 }
 </script>

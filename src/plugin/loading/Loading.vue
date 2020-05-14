@@ -24,7 +24,7 @@ export default {
     position: fixed;
     left: 0;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
     @include flex;
     .mask{
         width: 100%;

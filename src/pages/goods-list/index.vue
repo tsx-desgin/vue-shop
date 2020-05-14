@@ -57,8 +57,10 @@ export default {
     },
     methods:{
         sortGoodslist(goods_sortField){
+            this.$showLoading()
             this.sortField=goods_sortField;
             this.resetData();
+            this.$hideLoading()
             // this.getList();
             // console.log(this.list)
             // this.loadMore();
@@ -79,7 +81,7 @@ export default {
             }
         },
         async getCidByCname(){
-             if(this.catId>0||this.pid>0){
+            if(this.catId>0||this.pid>0){
                 return
             }
             if(this.cname!==''&&this.cid===0){
@@ -92,17 +94,17 @@ export default {
             }
         },
         async getList(){
-        this.$showLoading()
-        const {goods,total}=await this.axios.get('api/goods_list?type=1',{
-            params:{
-            page:this.page,
-            count:this.count,
-            cat_id:this.catId, //一级分类id
-            sortField:this.sortField,
-            pid:this.pid, //二级分类id
-            sortType:this.sortType,
-            }
-        });
+            this.$showLoading()
+            const {goods,total}=await this.axios.get('api/goods_list?type=1',{
+                params:{
+                    page:this.page,
+                    count:this.count,
+                    cat_id:this.catId, //一级分类id
+                    sortField:this.sortField,
+                    pid:this.pid, //二级分类id
+                    sortType:this.sortType,
+                }
+            });
             this.$hideLoading()
             this.list=this.list.concat(goods);
             console.log(this.list)
