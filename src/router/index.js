@@ -14,6 +14,7 @@ import orderPay from "../pages/order-pay/index.vue";
 import orderAddress from "../pages/order-address/index.vue";
 import user from "../pages/user/index.vue";
 import userInfo from "../pages/user-info/index.vue";
+import userSign from "../pages/user-sign/index.vue";
 import UserAddAddress from "../pages/UserAddAddress/index.vue";
 import {Token} from "../utils/token"
 
@@ -96,6 +97,11 @@ const routes = [
     component:userInfo
   },
   {
+    path:'/user/userSign',
+    name:"userSign",
+    component:userSign
+  },
+  {
     path:'/user/add-address',
     name:"UserAddAddress",
     component:UserAddAddress
@@ -174,7 +180,7 @@ const router = new VueRouter({
 });
 
 // 需要做登录验证的路由名称
-const AUTH_ROUTER_NAME=['coupon','order','user','UserAddress','UserAddAddress','userInfo','orderAddress','orderPay']
+const AUTH_ROUTER_NAME=['coupon','order','user','UserAddress','UserAddAddress','userSign','userInfo','orderAddress','orderPay']
 // 登录验证
 router.beforeEach((to, from, next) => {
   if(AUTH_ROUTER_NAME.includes(to.name)){

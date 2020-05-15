@@ -8,6 +8,8 @@ import store from "./store";
 import loading from "./plugin/loading"
 import modal from "./plugin/modal"
 import toast from "./plugin/toast"
+// 年月日插件
+import AwesomePicker from 'vue-awesome-picker';
 // 懒加载
 import VueLazyload from 'vue-lazyload'
 // Request 和 Response 对象起到了服务器与客户机之间的信息传递作用。
@@ -33,6 +35,7 @@ Vue.use(VueAxios, axios)
 Vue.use(VueLazyload, {
   loading: '/1.svg',
 })
+Vue.use(AwesomePicker);
 Vue.use(loading)
 Vue.use(modal)
 Vue.use(toast)

@@ -9,7 +9,7 @@
                 <div class="nickname" @click="$router.push('/user/userInfo')">{{user.nickname}}<span>lv{{user.level}}</span></div>
                 <div class="user-point">积分: <span class="point">{{user.points}}</span></div>
             </div>
-            <div class="user-sign icon">
+            <div class="user-sign icon" @click="$router.push('/user/userSign')">
                 &#xe60e; 签到
             </div>
         </div>

@@ -114,15 +114,15 @@ export default {
         }
     }
     .login-btn{
-            width: 100%;
-            height: 1rem;
-            color: #fff;
-            font-size:.32rem ;
-            background: $color-a;
-            margin-top: .4rem;
-            padding: 0 .2rem;
-            box-sizing: border-box;
-            border-radius:.1rem ;
+        width: 100%;
+        height: 1rem;
+        color: #fff;
+        font-size:.32rem ;
+        background: $color-a;
+        margin-top: .4rem;
+        padding: 0 .2rem;
+        box-sizing: border-box;
+        border-radius:.1rem ;
             .submit{
                 width: 100%;
                 height: 100%;
