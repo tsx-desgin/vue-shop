@@ -1,7 +1,7 @@
 <template>
 <div class="page">
     <Head title="用户信息" back="/user"></Head>
-    <div class="user-Info" v-if="this.user!=null">
+    <div class="user-Info" v-if="Object.keys(user).length>0">
         <div class="avatar">
             <img v-lazy="user.avatar" alt="" class="user-avatar">
             <input type="file" accept="image/*" @change="chooseAvatar">

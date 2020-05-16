@@ -53,8 +53,9 @@ export default {
             if(Object.keys(this.userLevel).length>0){
                 const total = this.userLevel.next_level_points;
                 const per=(val/total)*100;
+                console.log(per)
                 this.$refs.points.style.left = per+'%';
-                if(per>10){
+                if(per>=10){
                     this.$refs.points.style.display='block'
                 }else{
                     this.$refs.points.style.display='none'
@@ -94,7 +95,25 @@ export default {
         },
         sign(){
             const token =Token.getToken()
-            this.userLevel.points+=20
+            this.$showLoading();
+            this.axios.post('shose/user/sign',{},{
+                headers:{
+                    token
+                }
+            }).then(()=>{
+                  this.$showToast({
+                    message:'签到成功',
+                    callback:()=>{
+                        this.getUserSign()
+                    }
+                })
+            }).catch(err=>{
+                this.$showToast({
+                    message:err.message
+                })
+            }).finally(()=>{
+                this.$hideLoading()
+            })
         }
     }
 }
@@ -141,6 +160,9 @@ export default {
                    &.active{
                       color: #fff;
                       background: $color-a;
+                        &.today{
+                          color: #fff;
+                        }
                   }
                    &.today{
                     color: #333;

@@ -51,12 +51,12 @@
                 <div class="text">我的收藏</div>
                 <span class="icon more">&#xe60c;</span>
             </div>
-            <div class="nav-cell border-bottom">
+            <div class="nav-cell border-bottom" @click="$router.push('/user/address')">
                 <span class="icon">&#xe609;</span>
                 <div class="text">我的地址</div>
                 <span class="icon more">&#xe60c;</span>
             </div>
-            <div class="nav-cell border-bottom">
+            <div class="nav-cell border-bottom" @click="$router.push('/user/userTrack')">
                 <span class="icon">&#xe6f2;</span>
                 <div class="text">我的足迹</div>
                 <span class="icon more">&#xe60c;</span>
@@ -101,7 +101,7 @@ export default {
     },
     mounted(){
         this.getUser(this.axios)
-        document.querySelector('.page').style.height=document.documentElement.offsetHeight-176+'px';
+        document.querySelector('.page').style.height=document.documentElement.offsetHeight+'px';
     },
     methods:{
         ...mapActions(['getUser']),
@@ -153,6 +153,7 @@ export default {
   min-height: 100%;
   background: $color-c;
   padding:$head-h .0rem $footer-h;
+  box-sizing: border-box;
   .user-container{
     width: 100%;
     height: 3.86rem;

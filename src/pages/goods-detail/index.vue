@@ -91,7 +91,7 @@ export default {
         this.getGoods()
         this.initScroll()
         this.initColect()
-        // Token.delToken()
+        this.setHistory()
     },
     data(){
         return{
@@ -117,6 +117,17 @@ export default {
         }
     },
     methods:{
+        // 获取足迹
+        async setHistory(){
+            const token=Token.getToken();
+            if(token!==''&&this.id>0){
+                await this.axios.post('shose/history/set',{goods_id:this.id},{
+                    headers:{
+                        token
+                    }
+                })
+            }
+        },
         getCoupon(){
             const token = Token.getToken()
             if(token===''){
