@@ -50,7 +50,6 @@ import VDistpicker from 'v-distpicker'
 import addressValidate from '../../validate/address'
 import {validate} from '../../utils/function'
 import {Token} from "../../utils/token"
-const USER_TOKEN=Token.getToken();
 export default {
     components:{
         Head,
@@ -86,6 +85,7 @@ export default {
         })//通过next()来渲染
     },
     mounted(){
+        console.log(this.$route)
     },
     methods:{
         selectAddress(data){
@@ -114,6 +114,7 @@ export default {
                 return
             }
             this.$showLoading()
+            const USER_TOKEN=Token.getToken();
             this.axios.post('shose/address/add',data,{
                 headers:{
                     token:USER_TOKEN
