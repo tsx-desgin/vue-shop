@@ -256,11 +256,13 @@ export default {
                 this.coupon=Coupon.filter(item=>item.is_use===0&&item.expires_time*1000>Date.now()&&item!=null)
                 return
             }
+            console.log(Coupon.length)
             const coupon=await this.axios.get('shose/coupon/get',{
                 headers:{
                     token:USER_TOKEN
                 }
             }).then(res=>res.coupon)
+            console.log(coupon)
             this.coupon=coupon.map(item=>{
                 if(item.is_use===0&&item.expires_time*1000>Date.now()){
                     item.selected=false;
@@ -268,10 +270,9 @@ export default {
                 }
             })
             this.coupon=this.coupon.filter(item=>{
-                item!=null;
+                return item!=null;
             })
             Storage.setItem('coupon',this.coupon)
-            console.log(this.coupon)
         }
     }
 }

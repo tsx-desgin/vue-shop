@@ -17,14 +17,14 @@
             </div>
         </div>
     </div>
-    <div class="Address" v-if="showAddress" @click="$router.push('/user/add-address?id='+$route.query.id+'&url='+encodeURIComponent($route.query.url))">新增收货地址</div>
+    <div class="Address" v-if="showAddress" @click="$router.push('/user/add-address?url='+encodeURIComponent($route.query.url))">新增收货地址</div>
 </div>
 </template>
 <script>
 import Head from "@/components/head"
 import {Token} from "../../utils/token"
 const USER_TOKEN=Token.getToken();
-const MAX_ADDRESS_NUM=10;
+const MAX_ADDRESS_NUM=15;
 export default {
     components:{
         Head

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../pages/home/index.vue";
+import search from "../pages/search/index.vue";
 import category from "../pages/category/index.vue";
 import goodsList from "../pages/goods-list/index.vue";
 import cart from "../pages/cart/index.vue";
@@ -17,8 +18,10 @@ import userInfo from "../pages/user-info/index.vue";
 import userSign from "../pages/user-sign/index.vue";
 import userTrack from "../pages/userTrack/index.vue";
 import userAdress from "../pages/user-address/index.vue";
+import UserCoupon from "../pages/user-coupon/index.vue";
 import UserAddAddress from "../pages/UserAddAddress/index.vue";
 import {Token} from "../utils/token"
+import config from './config'
 
 Vue.use(VueRouter);
 
@@ -32,6 +35,11 @@ const routes = [
     path: "/category",
     name: "category",
     component: category
+  },
+  {
+    path: "/search",
+    name: "search",
+    component: search
   },
   {
     path: "/cart",
@@ -119,6 +127,11 @@ const routes = [
     component:UserAddAddress
   },
   {
+    path:'/user/userCoupon',
+    name:"UserCoupon",
+    component:UserCoupon
+  },
+  {
     path: "/coupon",
     name: "coupon",
     component: coupon,
@@ -190,12 +203,9 @@ const router = new VueRouter({
     return {x:0,y:0}
   }
 });
-
-// 需要做登录验证的路由名称
-const AUTH_ROUTER_NAME=['coupon','order','user','userAdress','UserAddAddress','userSign','userTrack','userInfo','orderAddress','orderPay']
 // 登录验证
 router.beforeEach((to, from, next) => {
-  if(AUTH_ROUTER_NAME.includes(to.name)){
+  if(Array.isArray(config.authRoute) && config.authRoute.includes(to.name)){
     const token=Token.getToken()
     if(token===''){
       console.log('to',to)

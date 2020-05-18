@@ -20,8 +20,8 @@
                     默认地址
                 </div>
                 <div class="edit-address">
-                    <span class="icon" @click="$router.push({name:'UserAddAddress',params:{id:item.id}})">&#xe67c; 编辑</span>
-                    <span class="icon">&#xe60d; 删除</span>
+                    <span class="icon" @click="$router.push('/user/add-address?id'+item.id)">&#xe67c; 编辑</span>
+                    <span class="icon" @click="delAddress(item.id)">&#xe60d; 删除</span>
                 </div>
             </div>
         </div>
@@ -48,6 +48,27 @@ export default {
         this.getUserAddress()
     },
     methods:{
+        delAddress(addressId){
+            this.$showModal({
+                content:'确认删除吗?',
+                success:res=>{
+                    if(res.confirm){
+                        const USER_TOKEN=Token.getToken();
+                        this.axios.post('shose/address/delete',{id:addressId},{
+                            headers:{
+                                token:USER_TOKEN
+                            }
+                        }).then(()=>{
+                            this.$showToast({
+                                message:'删除成功'
+                            })
+                            const index = this.address.findIndex(item=>item.id===addressId);
+                            this.address.splice(index,1);
+                        })
+                    }
+                }
+            })
+        },
         setDefaultAddress(addressId,isDefault){
             if(isDefault===1){
                 return

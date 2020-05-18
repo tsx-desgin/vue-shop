@@ -1,6 +1,6 @@
 <template>
 <div class="page">
-    <Head title="我的收货地址" :back="'/order/address?id='+$route.query.id+'&url='+encodeURIComponent($route.query.url)||backUrl"></Head>
+    <Head title="我的收货地址" :back="backUrl"></Head>
     <div class="address">
         <div class="row border-bottom">
             <label class="title">收货人</label>
@@ -50,6 +50,7 @@ import VDistpicker from 'v-distpicker'
 import addressValidate from '../../validate/address'
 import {validate} from '../../utils/function'
 import {Token} from "../../utils/token"
+import {Storage} from "../../utils/storage"
 export default {
     components:{
         Head,
@@ -67,6 +68,7 @@ export default {
             phone:'',
             address:'',
             isDefault:true,
+            addressId:0,
         }
     },
     computed:{
@@ -78,16 +80,39 @@ export default {
             }
         }
     },
-    beforeRouteEnter (to, from, next) {
-        next(vm=>{
-        // 通过 `vm` 访问组件实例
-            vm.backUrl=from.path;
-        })//通过next()来渲染
-    },
     mounted(){
         console.log(this.$route)
+        this.addressId=parseInt(this.$route.query.id)||0;
+        if(this.addressId>0){
+            this.backUrl='/user/address'
+        }else{
+            this.backUrl='/order'
+        }
+        this.getAddress()
     },
     methods:{
+        async getAddress(){
+            if(this.addressId<=0){
+                return
+            }
+            const USER_TOKEN=Token.getToken();
+            const res=await this.axios.get('shose/address',{
+                params:{
+                    id:this.addressId,
+                },
+                headers:{
+                    token:USER_TOKEN
+                }
+            }).then(res=>res.address)
+            this.name=res.name;
+            this.phone=res.phone;
+            this.address=res.address;
+            this.province=res.province;
+            this.city=res.city;
+            this.area=res.area;
+            this.isDefault=res.is_default===1;
+            console.log(res)
+        },
         selectAddress(data){
            this.province=data.province.value;
            this.city=data.city.value;
@@ -115,12 +140,30 @@ export default {
             }
             this.$showLoading()
             const USER_TOKEN=Token.getToken();
-            this.axios.post('shose/address/add',data,{
+            let url
+            if(this.addressId>0){
+                url='shose/address/update',
+                data.id=this.addressId
+            }else{
+                url='shose/address/add'
+            }
+            this.axios.post(url,data,{
                 headers:{
                     token:USER_TOKEN
                 }
             }).then(()=>{
-                this.$router.push(`/order?loginR=${encodeURIComponent(this.$route.query.url)}`)
+                if(this.addressId>0){
+                    this.$showToast({
+                        message:'修改成功',
+                        callback:()=>{
+                            this.$router.replace('/user/address')
+                        }
+                    })
+                }else{
+                    data.id=res.address_id;
+                    Storage.setItem('address',data);
+                    this.$router.push('/order')
+                }
             }).catch(err=>{
                 this.$showToast({
                     message:err.message
