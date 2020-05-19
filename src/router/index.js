@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../pages/home/index.vue";
 import search from "../pages/search/index.vue";
+import searchList from "../pages/search-list/index.vue";
 import category from "../pages/category/index.vue";
 import goodsList from "../pages/goods-list/index.vue";
 import cart from "../pages/cart/index.vue";
@@ -40,6 +41,11 @@ const routes = [
     path: "/search",
     name: "search",
     component: search
+  },
+  {
+    path: "/search-list",
+    name: "searchList",
+    component: searchList
   },
   {
     path: "/cart",

@@ -2,17 +2,20 @@
 <div class="head-container">
     <div class="icon back" @click="$router.replace('/')">&#xe9c9;</div>
     <div class="input-bar">
-        <input type="text" v-model="keyword" placeholder="请输入关键字">
+        <input type="text" v-model.trim="keyword" placeholder="请输入关键字">
         <span class="icon clear" v-show="keyword!=''" @click="keyword=''">&#xe625;</span>
     </div>
-    <span class="search-btn">搜索</span>
+    <span class="search-btn" @click="search()">搜索</span>
     <ul class="quick-search" v-show="keyword!=''">
-        <li class="quick-item" v-for="item of quickSearch" :key="item">{{item}}</li>
+        <li class="quick-item border-bottom" v-for="item of quickSearch" :key="item" @click="search(item)">{{item}}</li>
     </ul>
 </div>
 </template>
 <script>
 export default {
+    props:{
+        query:String,
+    },
     data(){
         return{
             keyword:'',
@@ -20,9 +23,33 @@ export default {
         }
     },
     watch:{
-        keyword(val){
-
+        keyword(){
+            this.getQuickSearch()
+        },
+        query(val){
+            if(val!=''){
+                this.keyword=val
+            }
         }
+    },
+    methods: {
+        search(keyword =null){
+            if(keyword===null){
+                keyword=this.keyword;
+            }
+            this.$emit('search',keyword);
+        },
+        getQuickSearch(){
+            if(this.keyword===''){
+                this.quickSearch=[];
+                return;
+            }
+            this.axios.get('shose/search/quick',{
+                params:{
+                    keyword:this.keyword
+                }
+            }).then(res=>this.quickSearch=res.list)
+        }  
     }
 }
 </script>
