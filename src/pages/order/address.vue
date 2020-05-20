@@ -17,6 +17,9 @@ export default {
     props:{
         address:Object,
     },
+    mounted(){
+        console.log('11',this.address)
+    },
     computed:{
         showAddress(){
             if(Reflect.has(this.address,'address')){
@@ -37,7 +40,7 @@ export default {
             const id = this.address.id||0;
             const url=encodeURIComponent('/order')
             this.$router.push(`/order/address?id=${id}&url=${url}`)
-            // console.log('11',this.$route)
+            console.log('11',this.$route)
         }
     }
 }

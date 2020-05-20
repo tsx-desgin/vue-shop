@@ -117,6 +117,7 @@ export default {
            this.province=data.province.value;
            this.city=data.city.value;
            this.area=data.area.value;
+           if(this.province)
            this.showAddress=false
         //    console.log(this.province,this.city,this.area)
        },
@@ -164,6 +165,7 @@ export default {
                     Storage.setItem('address',data);
                     this.$router.push('/order')
                 }
+                Storage.setItem('address',data);
             }).catch(err=>{
                 this.$showToast({
                     message:err.message

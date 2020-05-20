@@ -36,7 +36,6 @@ import Head from "@/components/head"
 import Address from "./address"
 import {Token} from "../../utils/token"
 import {Storage} from "../../utils/storage"
-const USER_TOKEN=Token.getToken();
 export default {
     components:{
         Head,
@@ -215,6 +214,7 @@ export default {
             // console.log('11',this.goods)
         },
         async getUserAddress(){
+            const USER_TOKEN=Token.getToken();
             const UserAddress=Storage.getItem('address');
             if(Object.keys(UserAddress).length>0){
                 if(UserAddress.id!=undefined&&UserAddress.id!=this.addressId){

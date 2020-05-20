@@ -20,7 +20,7 @@
                     默认地址
                 </div>
                 <div class="edit-address">
-                    <span class="icon" @click="$router.push('/user/add-address?id'+item.id)">&#xe67c; 编辑</span>
+                    <span class="icon" @click="$router.push('/user/add-address?id='+item.id)">&#xe67c; 编辑</span>
                     <span class="icon" @click="delAddress(item.id)">&#xe60d; 删除</span>
                 </div>
             </div>

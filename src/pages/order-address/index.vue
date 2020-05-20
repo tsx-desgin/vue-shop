@@ -23,7 +23,6 @@
 <script>
 import Head from "@/components/head"
 import {Token} from "../../utils/token"
-const USER_TOKEN=Token.getToken();
 const MAX_ADDRESS_NUM=15;
 export default {
     components:{
@@ -45,7 +44,7 @@ export default {
         })//通过next()来渲染
     },
     mounted(){
-        document.querySelector('.page').style.height=document.documentElement.offsetHeight-176+'px'
+        document.querySelector('.page').style.height=document.documentElement.offsetHeight-88+'px'
         this.getUserAddress()
     },
     methods:{
@@ -54,6 +53,7 @@ export default {
             this.$router.push('/order?loginR='+encodeURIComponent(this.$route.query.url)+'&id='+id)
         },
         async getUserAddress(){
+            const USER_TOKEN=Token.getToken();
             this.address=await this.axios.get('shose/address',{
                 headers:{
                     token:USER_TOKEN
