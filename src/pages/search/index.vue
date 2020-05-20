@@ -49,10 +49,10 @@ export default {
     },
     methods:{
         async search(keyword){
-            SearchHistory.setHistory(keyword)
              if(keyword===''){
                 return;
             }
+            SearchHistory.setHistory(keyword)
             this.$showLoading()
             const res= await this.axios.get('shose/search/quick',{
                 params:{
