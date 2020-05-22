@@ -69,6 +69,7 @@ export default {
             address:'',
             isDefault:true,
             addressId:0,
+            t:0,
         }
     },
     computed:{
@@ -81,6 +82,7 @@ export default {
         }
     },
     mounted(){
+        this.t=this.$route.query.t||0;
         console.log(this.$route)
         this.addressId=parseInt(this.$route.query.id)||0;
         if(this.addressId>0){
@@ -161,11 +163,17 @@ export default {
                         }
                     })
                 }else{
-                    data.id=res.address_id;
-                    Storage.setItem('address',data);
-                    this.$router.push('/order')
+                    if(this.t==1){
+                        this.$router.replace('/user/address')
+                    }else{
+                        data.id=res.address_id;
+                        Storage.setItem('address',data);
+                        this.$router.push('/order')
+                    }
                 }
-                Storage.setItem('address',data);
+                if(data.is_default==1){
+                    Storage.setItem('address',data);
+                }
             }).catch(err=>{
                 this.$showToast({
                     message:err.message

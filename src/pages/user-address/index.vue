@@ -20,18 +20,19 @@
                     默认地址
                 </div>
                 <div class="edit-address">
-                    <span class="icon" @click="$router.push('/user/add-address?id='+item.id)">&#xe67c; 编辑</span>
+                    <span class="icon" @click="$router.push('/user/add-address?id='+item.id+'&t=1')">&#xe67c; 编辑</span>
                     <span class="icon" @click="delAddress(item.id)">&#xe60d; 删除</span>
                 </div>
             </div>
         </div>
     </div>
-    <div class="Address" v-if="showAddress" @click="$router.push('/user/add-address?id='+$route.query.id+'&url='+encodeURIComponent($route.query.url))">新增收货地址</div>
+    <div class="Address" v-if="showAddress" @click="$router.push('/user/add-address?t=1')>新增收货地址</div>
 </div>
 </template>
 <script>
 import Head from "@/components/head"
 import {Token} from "../../utils/token"
+import {Storage} from "../../utils/storage"
 const MAX_ADDRESS_NUM=10;
 export default {
     components:{
@@ -92,6 +93,10 @@ export default {
                 })
                 this.$showToast({
                     message:'设置成功',
+                    callback:()=>{
+                        const address = this.address.filter(item =>item.is_default===1)
+                        Storage.setItem('address',address)
+                    }
                 })
             }).catch(err=>{
                 this.$showToast({
