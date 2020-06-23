@@ -19,6 +19,7 @@ import userInfo from "../pages/user-info/index.vue";
 import userSign from "../pages/user-sign/index.vue";
 import userTrack from "../pages/userTrack/index.vue";
 import userAdress from "../pages/user-address/index.vue";
+import userOrder from "../pages/user-order/index.vue";
 import UserCoupon from "../pages/user-coupon/index.vue";
 import UserAddAddress from "../pages/UserAddAddress/index.vue";
 import {Token} from "../utils/token"
@@ -131,6 +132,11 @@ const routes = [
     path:'/user/add-address',
     name:"UserAddAddress",
     component:UserAddAddress
+  },
+  {
+    path:'/user/order',
+    name:"userOrder",
+    component:userOrder
   },
   {
     path:'/user/userCoupon',

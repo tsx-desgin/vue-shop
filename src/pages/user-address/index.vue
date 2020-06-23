@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    <div class="Address" v-if="showAddress" @click="$router.push('/user/add-address?t=1')>新增收货地址</div>
+    <div class="Address" v-if="showAddress" @click="$router.push('/user/add-address?t=1')">新增收货地址</div>
 </div>
 </template>
 <script>
@@ -54,6 +54,7 @@ export default {
                 content:'确认删除吗?',
                 success:res=>{
                     if(res.confirm){
+                        this.$showLoading()
                         const USER_TOKEN=Token.getToken();
                         this.axios.post('shose/address/delete',{id:addressId},{
                             headers:{
@@ -64,7 +65,16 @@ export default {
                                 message:'删除成功'
                             })
                             const index = this.address.findIndex(item=>item.id===addressId);
-                            this.address.splice(index,1);
+                            if(this.address[index].is_default===1){
+                                this.address.splice(index,1);
+                                this.address[0].is_default=1
+                                Storage.setItem('address',this.address[0])
+                            }else{
+                                this.address.splice(index,1);
+                            }
+                            
+                        }).finally(()=>{
+                            this.$hideLoading()
                         })
                     }
                 }
@@ -116,15 +126,13 @@ export default {
                 headers:{
                     token:USER_TOKEN
                 }
-            }).then(res=>{
-                res.address.map(item=>{
-                    item.detail=`${item.province}${item.city}${item.area}${item.address}`;
-                    item.selected=item.id==this.addressId;
-                })
-                return res.address
-            })
+            }).then(res=>res.address)
             this.showAddress=(MAX_ADDRESS_NUM-this.address.length)>0
-            console.log(this.address,this.addressId)
+            console.log(this.address)
+            const index = this.address.findIndex(item => item.is_default===1)
+            if(index > -1){
+                Storage.setItem('address',this.address[index])
+            }
         }
     }
 }

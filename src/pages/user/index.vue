@@ -16,22 +16,22 @@
         <div class="order-menu-wrapper">
             <div class="order-menu">
                 <div class="title">我的订单
-                    <router-link to="/user" class="icon">查看全部 &#xe60c;</router-link>
+                    <span @click="toUserOrder()" class="icon">查看全部 &#xe60c;</span>
                 </div>
                 <div class="menu-list">
-                    <div class="menu-cell">
+                    <div class="menu-cell" @click="toUserOrder(1)">
                         <span class="icon">&#xe604;</span>
                         待付款
                     </div>
-                    <div class="menu-cell">
+                    <div class="menu-cell" @click="toUserOrder(2)">
                         <span class="icon">&#xe606;</span>
                         待发货
                     </div>
-                    <div class="menu-cell">
+                    <div class="menu-cell" @click="toUserOrder(3)">
                         <span class="icon">&#xe61e;</span>
                         待收货
                     </div>
-                    <div class="menu-cell">
+                    <div class="menu-cell" @click="toUserOrder(4)">
                         <span class="icon">&#xe738;</span>
                         已完成
                     </div>
@@ -104,6 +104,9 @@ export default {
         document.querySelector('.page').style.height=document.documentElement.offsetHeight+'px';
     },
     methods:{
+        toUserOrder(status=-1){
+            this.$router.push('/user/order?status='+status)
+        },
         ...mapActions(['getUser']),
         chooseAvatar(e){
             const token=Token.getToken()

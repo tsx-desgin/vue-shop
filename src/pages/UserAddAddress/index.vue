@@ -82,7 +82,7 @@ export default {
         }
     },
     mounted(){
-        this.t=this.$route.query.t||0;
+        this.t=parseInt(this.$route.query.t)||0;
         console.log(this.$route)
         this.addressId=parseInt(this.$route.query.id)||0;
         if(this.addressId>0){
@@ -297,7 +297,6 @@ export default {
       right: -.5rem;
       background-color: #fff;
     }
-
     .switch-container input:checked~label{
       background-color: #ff5e46;
     }

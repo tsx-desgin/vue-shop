@@ -8,6 +8,7 @@ const AUTH_ROUTE_NAME=[
     'userTrack',
     'UserCoupon',
     'userInfo',
+    "userOrder",
     'orderAddress',
     'orderPay',
 ]
